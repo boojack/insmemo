@@ -6,3 +6,4 @@ export const userRouter = new Router({
 });
 
 userRouter.get("/test", UserController.test);
+userRouter.post("/new", UserController.createUser);

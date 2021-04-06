@@ -1,9 +1,15 @@
 import { Context } from "koa";
 
 export namespace UserController {
-  export function test(ctx: Context) {
+  // just for test
+  export async function test(ctx: Context) {
     ctx.body = "test";
   }
 
-  export function createUser(ctx: Context) {}
+  export async function createUser(ctx: Context) {
+    console.log(ctx.request.body);
+    ctx.body = {
+      
+    }
+  }
 }
