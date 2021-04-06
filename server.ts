@@ -1,11 +1,14 @@
 import Koa from "koa";
+import Serve from "koa-static";
 import { DB } from "./helpers/DBHelper";
 import { userRouter } from "./routers/user";
 
-const App = new Koa();
+const app = new Koa();
 
-App.use(userRouter.routes());
+app.use(Serve("./web/dist/"));
 
-App.listen(8080, async () => {
+app.use(userRouter.routes());
+
+app.listen(8080, async () => {
   await DB.connectToMySQL();
 });
