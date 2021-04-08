@@ -15,9 +15,13 @@ export namespace UserController {
 
     const user = await UserModel.getUserInfoById(userId);
 
+    // NOTE: 数据去敏
+    const data = user as LooseObject;
+    delete data.password;
+
     ctx.body = {
       status: 200,
-      data: user,
+      data,
     };
   }
 
@@ -55,17 +59,11 @@ export namespace UserController {
       return;
     }
 
-    // TODO: 数据去敏
-    user.password = "";
-
-    ctx.cookies.set("user_id", user.id, {
-      sameSite: true,
-    });
+    ctx.cookies.set("user_id", user.id, {});
 
     ctx.body = {
       status: "200",
       message: "succeed",
-      data: user,
     };
   }
 
@@ -94,12 +92,7 @@ export namespace UserController {
       return;
     }
 
-    // TODO: 数据去敏
-    user.password = "";
-
-    ctx.cookies.set("user_id", user.id, {
-      sameSite: true,
-    });
+    ctx.cookies.set("user_id", user.id, {});
 
     ctx.body = {
       status: "200",
