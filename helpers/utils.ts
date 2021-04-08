@@ -13,8 +13,11 @@ export namespace utils {
     return Date.now();
   }
 
+  // For example: 2021-4-8 17:52:17
   export function getNowTimeString(): string {
-    return new Date().toISOString().slice(0, 19).replace("T", " ");
+    const date = new Date();
+
+    return `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()} ${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`;
   }
 
   export function snakeToCamelCase(s: string): string {
