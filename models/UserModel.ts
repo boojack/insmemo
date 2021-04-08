@@ -16,22 +16,37 @@ export namespace UserModel {
    * @param password
    */
   export function createUser(username: string, password: string): Promise<UserType> {
-    const sql = `INSERT INTO users (id, username, password, created_at, updated_at) VALUES (?)`;
-    const nowTime = utils.getNowTimeString();
+    // TODO: valid params
+    const nowTimeStr = utils.getNowTimeString();
     const user: UserType = {
       id: utils.genUUID(),
       username,
       password,
-      createdAt: nowTime,
-      updatedAt: nowTime,
+      createdAt: nowTimeStr,
+      updatedAt: nowTimeStr,
     };
+    const sql = `INSERT INTO users (id, username, password, created_at, updated_at) VALUES (?)`;
 
     return new Promise((resolve, reject) => {
-      DB.conn.query(sql, [Object.values(user)], (err, result) => {
+      DB.conn.query(sql, [Object.values(user)], (err) => {
         if (err) {
           reject(err);
         } else {
           resolve(user);
+        }
+      });
+    });
+  }
+
+  export function getUserInfoById(userId: string): Promise<UserType> {
+    const sql = `SELECT * FROM users WHERE id=?`;
+
+    return new Promise((resolve, reject) => {
+      DB.conn.query(sql, [userId], (err, result) => {
+        if (err) {
+          reject(err);
+        } else {
+          resolve((DB.parseResult(result) as UserType[])[0]);
         }
       });
     });
@@ -56,7 +71,7 @@ export namespace UserModel {
     });
   }
 
-  export function validSigninInfo(username: string, password: string): Promise<boolean> {
+  export function validSigninInfo(username: string, password: string): Promise<UserType> {
     const sql = `SELECT * FROM users WHERE username=? AND password=?`;
 
     return new Promise((resolve, reject) => {
@@ -64,12 +79,7 @@ export namespace UserModel {
         if (err) {
           reject(err);
         } else {
-          result = DB.parseResult(result);
-          if (result && result.length > 0) {
-            resolve(true);
-          } else {
-            resolve(false);
-          }
+          resolve((DB.parseResult(result) as UserType[])[0]);
         }
       });
     });
