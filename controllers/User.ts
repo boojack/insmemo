@@ -2,7 +2,7 @@ import { Context } from "koa";
 import { UserModel } from "../models/UserModel";
 
 export namespace UserController {
-  export async function me(ctx: Context) {
+  export async function getMyUserInfo(ctx: Context) {
     const userId = ctx.cookies.get("user_id");
 
     if (!userId) {

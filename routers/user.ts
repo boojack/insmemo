@@ -5,7 +5,7 @@ export const userRouter = new Router({
   prefix: "/api/user",
 });
 
-userRouter.get("/me", UserController.me);
+userRouter.get("/me", UserController.getMyUserInfo);
 userRouter.post("/signup", UserController.signup);
 userRouter.post("/signin", UserController.signin);
 userRouter.post("/signout", UserController.signout);
