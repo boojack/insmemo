@@ -13,14 +13,14 @@ interface MemoType {
 export namespace MemoModel {
   export function createMemo(userId: string, content: string, uponMemoId?: string): Promise<MemoType> {
     const sql = `INSERT INTO memos (id, content, user_id, upon_memo_id, created_at, updated_at) VALUES (?)`;
-    const nowTime = utils.getNowTimeString();
+    const nowTimeStr = utils.getNowTimeString();
     const memo: MemoType = {
       id: utils.genUUID(),
       content,
       userId,
       uponMemoId,
-      createdAt: nowTime,
-      updatedAt: nowTime,
+      createdAt: nowTimeStr,
+      updatedAt: nowTimeStr,
     };
 
     return new Promise((resolve, reject) => {
@@ -34,26 +34,13 @@ export namespace MemoModel {
     });
   }
 
-  export function getAllMemos() {
-    const sql = `SELECT * FROM memos`;
-
-    DB.conn.query(sql, [], (err, result) => {
-      if (err) {
-        console.error(err);
-      }
-
-      console.log(DB.parseResult(result));
-    });
-  }
-
-  export function getAllMemosByUserID(userId: string): Promise<MemoType[]> {
-    const sql = `SELECT * FROM memos WHERE user_id=?`;
+  export function getMemosByUserId(userId: string, offset: number, amount: number = 20): Promise<MemoType[]> {
+    const sql = `SELECT * FROM memos WHERE user_id=? ORDER BY updated_at LIMIT ${amount} OFFSET ${offset}`;
 
     return new Promise((resolve, reject) => {
       DB.conn.query(sql, [userId], (err, result) => {
         if (err) {
           reject(err);
-          console.error(err);
         } else {
           resolve(DB.parseResult(result) as MemoType[]);
         }
@@ -62,10 +49,11 @@ export namespace MemoModel {
   }
 
   export function updateMemoContent(memoId: string, content: string): Promise<boolean> {
-    const sql = `UPDATE memos SET content=? WHERE id=?`;
+    const sql = `UPDATE memos SET content=?, updated_at=? WHERE id=?`;
+    const nowTimeStr = utils.getNowTimeString();
 
     return new Promise((resolve, reject) => {
-      DB.conn.query(sql, [content, memoId], (err) => {
+      DB.conn.query(sql, [content, nowTimeStr, memoId], (err) => {
         if (err) {
           reject(err);
         } else {
@@ -76,7 +64,7 @@ export namespace MemoModel {
   }
 
   export function deleteMemoByID(memoId: string): Promise<boolean> {
-    const sql = `DELETE * FROM memos WHERE id=?`;
+    const sql = `DELETE FROM memos WHERE id=?`;
 
     return new Promise((resolve, reject) => {
       DB.conn.query(sql, [memoId], (err) => {
