@@ -34,6 +34,29 @@ export namespace MemoModel {
     });
   }
 
+  export function saveLocalMemo(userId: string, content: string, createdAt: string, updatedAt: string, uponMemoId?: string): Promise<MemoType> {
+    const sql = `INSERT INTO memos (id, content, user_id, upon_memo_id, created_at, updated_at) VALUES (?)`;
+    const nowTimeStr = utils.getNowTimeString();
+    const memo: MemoType = {
+      id: utils.genUUID(),
+      content,
+      userId,
+      uponMemoId,
+      createdAt: createdAt || nowTimeStr,
+      updatedAt: updatedAt || nowTimeStr,
+    };
+
+    return new Promise((resolve, reject) => {
+      DB.conn.query(sql, [Object.values(memo)], (err) => {
+        if (err) {
+          reject(err);
+        } else {
+          resolve(memo);
+        }
+      });
+    });
+  }
+
   export function getMemosByUserId(userId: string, offset: number, amount: number = 20): Promise<MemoType[]> {
     const sql = `SELECT * FROM memos WHERE user_id=? ORDER BY updated_at LIMIT ${amount} OFFSET ${offset}`;
 

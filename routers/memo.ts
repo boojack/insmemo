@@ -9,5 +9,6 @@ export const memoRouter = new Router({
 memoRouter.use(validSigninCookie);
 memoRouter.get("/all", MemoController.getMemos);
 memoRouter.post("/new", MemoController.createMemo);
+memoRouter.post("/new/local", MemoController.saveLocalMemo);
 memoRouter.post("/delete", MemoController.deleteMemo);
 memoRouter.post("/update", MemoController.updateMemo);
