@@ -3,16 +3,7 @@ import { UserModel } from "../models/UserModel";
 
 export namespace UserController {
   export async function getMyUserInfo(ctx: Context) {
-    const userId = ctx.cookies.get("user_id");
-
-    if (!userId) {
-      ctx.body = {
-        status: 200,
-        message: "need to sign in",
-      };
-      return;
-    }
-
+    const userId = ctx.cookies.get("user_id") as string;
     const user = await UserModel.getUserInfoById(userId);
 
     // NOTE: 数据去敏
@@ -26,89 +17,64 @@ export namespace UserController {
   }
 
   export async function signup(ctx: Context) {
-    const {
-      request: { body },
-    } = ctx;
-
-    const { username, password } = body;
+    const { username, password } = ctx.request.body;
 
     if (!username || !password) {
-      ctx.body = {
-        status: "200",
-        message: "bad request",
-      };
-      return;
+      throw new Error("bad request");
     }
 
     const usernameUsable = await UserModel.checkUsernameUsable(username);
     if (!usernameUsable) {
-      ctx.body = {
-        status: "200",
-        message: "username unusable",
-      };
-      return;
+      throw new Error("username unusable");
     }
 
     const user = await UserModel.createUser(username, password);
 
     if (!user) {
-      ctx.body = {
-        status: "200",
-        message: "username unusable",
-      };
-      return;
+      throw new Error("sign up failed");
     }
 
-    ctx.cookies.set("user_id", user.id, {});
+    ctx.cookies.set("user_id", user.id, {
+      expires: new Date(Date.now() + 1000 * 3600 * 24 * 365),
+    });
 
     ctx.body = {
       status: "200",
-      message: "succeed",
+      message: "sign up succeed",
     };
   }
 
   export async function signin(ctx: Context) {
-    const {
-      request: { body },
-    } = ctx;
-
-    const { username, password } = body;
+    const { username, password } = ctx.request.body;
 
     if (!username || !password) {
-      ctx.body = {
-        status: "200",
-        message: "bad request",
-      };
-      return;
+      throw new Error("bad request");
     }
 
     const user = await UserModel.validSigninInfo(username, password);
 
     if (!user) {
-      ctx.body = {
-        status: "200",
-        message: "unvalid",
-      };
-      return;
+      throw new Error("sign in form unvalid");
     }
 
-    ctx.cookies.set("user_id", user.id, {});
+    ctx.cookies.set("user_id", user.id, {
+      expires: new Date(Date.now() + 1000 * 3600 * 24 * 365),
+    });
 
     ctx.body = {
       status: "200",
-      message: "succeed",
+      message: "sign in succeed",
     };
   }
 
   export async function signout(ctx: Context) {
     ctx.cookies.set("user_id", "", {
-      sameSite: true,
       expires: new Date(),
     });
 
     ctx.body = {
       status: "200",
-      message: "succeed",
+      message: "sign out succeed",
     };
   }
 }

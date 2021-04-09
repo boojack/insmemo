@@ -5,7 +5,6 @@ export namespace MemoController {
   // get memos by userid in cookie
   export async function getMemos(ctx: Context) {
     const userId = ctx.cookies.get("user_id") as string;
-
     const { offset: offsetStr, amount: amountStr } = ctx.query;
     let offset = parseInt(offsetStr as string) | 0;
     let amount = parseInt(amountStr as string) | 20;
@@ -59,7 +58,10 @@ export namespace MemoController {
       throw new Error("memoid is empty");
     }
 
-    await MemoModel.deleteMemoByID(memoId);
+    const result = await MemoModel.deleteMemoByID(memoId);
+    if (!result) {
+      throw new Error("delete memo failed");
+    }
 
     ctx.body = {
       status: 200,
@@ -74,7 +76,10 @@ export namespace MemoController {
       throw new Error("content is empty");
     }
 
-    await MemoModel.updateMemoContent(memoId, content);
+    const result = await MemoModel.updateMemoContent(memoId, content);
+    if (!result) {
+      throw new Error("update memo failed");
+    }
 
     ctx.body = {
       status: 200,

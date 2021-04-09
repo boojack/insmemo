@@ -16,7 +16,6 @@ export namespace UserModel {
    * @param password
    */
   export function createUser(username: string, password: string): Promise<UserType> {
-    // TODO: valid params
     const nowTimeStr = utils.getNowTimeString();
     const user: UserType = {
       id: utils.genUUID(),
@@ -61,6 +60,7 @@ export namespace UserModel {
           reject(err);
         } else {
           result = DB.parseResult(result);
+
           if (result && result.length > 0) {
             resolve(false);
           } else {
