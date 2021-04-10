@@ -8,3 +8,9 @@ type FunctionType = (...args: any) => any;
 interface LooseObject {
   [key: string]: any;
 }
+
+interface ResError {
+  status: number;
+  code: number;
+  message: string;
+}

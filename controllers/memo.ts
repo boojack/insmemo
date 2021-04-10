@@ -12,7 +12,6 @@ export namespace MemoController {
     const memos = await MemoModel.getMemosByUserId(userId, offset, amount);
 
     ctx.body = {
-      status: 200,
       data: memos,
     };
   }
@@ -29,7 +28,6 @@ export namespace MemoController {
     const memo = await MemoModel.createMemo(userId, content, uponMemoId);
 
     ctx.body = {
-      status: 200,
       data: memo,
     };
   }
@@ -46,7 +44,6 @@ export namespace MemoController {
     const memo = await MemoModel.saveLocalMemo(userId, content, createdAt, updatedAt, uponMemoId);
 
     ctx.body = {
-      status: 200,
       data: memo,
     };
   }
@@ -64,7 +61,6 @@ export namespace MemoController {
     }
 
     ctx.body = {
-      status: 200,
       message: "delete memo succeed",
     };
   }
@@ -82,7 +78,6 @@ export namespace MemoController {
     }
 
     ctx.body = {
-      status: 200,
       message: "update memo content succeed",
     };
   }

@@ -11,7 +11,6 @@ export namespace UserController {
     delete data.password;
 
     ctx.body = {
-      status: 200,
       data,
     };
   }
@@ -39,7 +38,6 @@ export namespace UserController {
     });
 
     ctx.body = {
-      status: "200",
       message: "sign up succeed",
     };
   }
@@ -62,7 +60,6 @@ export namespace UserController {
     });
 
     ctx.body = {
-      status: "200",
       message: "sign in succeed",
     };
   }
@@ -73,7 +70,6 @@ export namespace UserController {
     });
 
     ctx.body = {
-      status: "200",
       message: "sign out succeed",
     };
   }
