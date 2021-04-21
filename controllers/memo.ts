@@ -16,6 +16,17 @@ export namespace MemoController {
     };
   }
 
+  // get memo by id
+  export async function getMemoById(ctx: Context) {
+    const id = ctx.params.id as string;
+
+    const memo = await MemoModel.getMemoById(id);
+
+    ctx.body = {
+      data: memo,
+    };
+  }
+
   // create memo
   export async function createMemo(ctx: Context) {
     const userId = ctx.cookies.get("user_id") as string;

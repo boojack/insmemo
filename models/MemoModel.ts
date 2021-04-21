@@ -71,6 +71,20 @@ export namespace MemoModel {
     });
   }
 
+  export function getMemoById(id: string): Promise<MemoType> {
+    const sql = `SELECT * FROM memos WHERE id=?`;
+
+    return new Promise((resolve, reject) => {
+      DB.conn.query(sql, [id], (err, result) => {
+        if (err) {
+          reject(err);
+        } else {
+          resolve((DB.parseResult(result) as MemoType[])[0]);
+        }
+      });
+    });
+  }
+
   export function updateMemoContent(memoId: string, content: string): Promise<boolean> {
     const sql = `UPDATE memos SET content=?, updated_at=? WHERE id=?`;
     const nowTimeStr = utils.getNowTimeString();
