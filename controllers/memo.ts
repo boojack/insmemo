@@ -1,5 +1,6 @@
 import { Context } from "koa";
 import { MemoModel } from "../models/MemoModel";
+import { TagModel } from "../models/TagModel";
 
 export namespace MemoController {
   // get memos by userid in cookie
@@ -66,6 +67,7 @@ export namespace MemoController {
       throw new Error("memoid is empty");
     }
 
+    await TagModel.deleteMemoTagByMemoId(memoId);
     const result = await MemoModel.deleteMemoByID(memoId);
     if (!result) {
       throw new Error("delete memo failed");
