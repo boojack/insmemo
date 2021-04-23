@@ -15,6 +15,7 @@ export namespace UserController {
     delete data.password;
 
     ctx.body = {
+      succeed: true,
       data,
     };
   }

@@ -13,6 +13,7 @@ export namespace MemoController {
     const memos = await MemoModel.getMemosByUserId(userId, offset, amount);
 
     ctx.body = {
+      succeed: true,
       data: memos,
     };
   }
@@ -24,6 +25,7 @@ export namespace MemoController {
     const memo = await MemoModel.getMemoById(id);
 
     ctx.body = {
+      succeed: true,
       data: memo,
     };
   }

@@ -9,8 +9,8 @@ export async function errorHandler(ctx: Context, next: Next) {
 
     ctx.status = err.statusCode;
     ctx.body = {
-      status: error,
       succeed: false,
+      status: error,
       message: `${err.message}`,
     };
     console.error("Error handler:", error, error.message);
