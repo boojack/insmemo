@@ -40,7 +40,8 @@ export namespace TagController {
   // get memo tags
   export async function getTagsByMemoId(ctx: Context) {
     const memoId = ctx.params.id as string;
-    if (Boolean(memoId)) {
+
+    if (!Boolean(memoId)) {
       throw new Error("20001");
     }
 
@@ -68,7 +69,7 @@ export namespace TagController {
   export async function deleteTagById(ctx: Context) {
     const { tagId } = ctx.request.body;
 
-    if (Boolean(tagId)) {
+    if (!Boolean(tagId)) {
       throw new Error("20001");
     }
 
