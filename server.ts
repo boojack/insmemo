@@ -10,8 +10,10 @@ import { tagRouter } from "./routers/tag";
 
 const app = new Koa();
 
+// 错误处理中间件
 app.use(errorHandler);
-// 仅供 dev 使用
+
+// 跨域（仅供 dev 使用）
 if (process.env.NODE_ENV === "dev") {
   app.use(
     cors({

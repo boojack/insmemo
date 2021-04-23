@@ -34,12 +34,13 @@ export namespace MemoController {
     const { content, uponMemoId } = ctx.request.body;
 
     if (!content) {
-      throw new Error("content is empty");
+      throw new Error("20001");
     }
 
     const memo = await MemoModel.createMemo(userId, content, uponMemoId);
 
     ctx.body = {
+      succeed: true,
       data: memo,
     };
   }
@@ -50,12 +51,13 @@ export namespace MemoController {
     const { content, uponMemoId, createdAt, updatedAt } = ctx.request.body;
 
     if (!content) {
-      throw new Error("content is empty");
+      throw new Error("200001");
     }
 
     const memo = await MemoModel.saveLocalMemo(userId, content, createdAt, updatedAt, uponMemoId);
 
     ctx.body = {
+      succeed: true,
       data: memo,
     };
   }
@@ -64,16 +66,17 @@ export namespace MemoController {
     const { memoId } = ctx.request.body;
 
     if (!memoId) {
-      throw new Error("memoid is empty");
+      throw new Error("20001");
     }
 
     await TagModel.deleteMemoTagByMemoId(memoId);
     const result = await MemoModel.deleteMemoByID(memoId);
     if (!result) {
-      throw new Error("delete memo failed");
+      throw new Error("50002");
     }
 
     ctx.body = {
+      succeed: true,
       message: "delete memo succeed",
     };
   }
@@ -82,15 +85,16 @@ export namespace MemoController {
     const { memoId, content } = ctx.request.body;
 
     if (!content) {
-      throw new Error("content is empty");
+      throw new Error("20001");
     }
 
     const result = await MemoModel.updateMemoContent(memoId, content);
     if (!result) {
-      throw new Error("update memo failed");
+      throw new Error("50002");
     }
 
     ctx.body = {
+      succeed: true,
       message: "update memo content succeed",
     };
   }

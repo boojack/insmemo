@@ -43,7 +43,7 @@ export namespace DB {
     } else if (result instanceof Object) {
       const keys = Object.keys(result).map((k) => utils.snakeToCamelCase(k));
       const vals = Object.values(result);
-      const d: LooseObject = {};
+      const d: IterObject = {};
 
       for (let i = 0; i < keys.length; ++i) {
         d[keys[i]] = vals[i];
