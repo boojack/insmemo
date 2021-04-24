@@ -24,7 +24,7 @@ export namespace UserController {
     const { username, password } = ctx.request.body;
 
     if (!username || !password) {
-      throw new Error("20001");
+      throw new Error("30001");
     }
 
     const usernameUsable = await UserModel.checkUsernameUsable(username);
@@ -52,7 +52,7 @@ export namespace UserController {
     const { username, password } = ctx.request.body;
 
     if (!username || !password) {
-      throw new Error("20001");
+      throw new Error("30001");
     }
 
     const user = await UserModel.validSigninInfo(username, password);

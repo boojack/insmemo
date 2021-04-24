@@ -1,9 +1,10 @@
-const ErrorCode = ["20001", "20002", "40001", "50001", "50002"];
 const Errors: IterObject = {
-  // 客户端请求数据格式错误
-  "20001": "Request body type is illegal",
+  "20001": "Sign in first plz",
   "20002": "Username is unusable",
   "20003": "Sign up/in failed",
+
+  // 客户端请求数据格式错误
+  "30001": "Request body type is illegal",
 
   "40001": "Unknown error",
 
@@ -11,6 +12,7 @@ const Errors: IterObject = {
   "50001": "Server is not working normal",
   "50002": "Database error",
 };
+const ErrorCode = Object.keys(Errors);
 
 export function getErrorInfo(code: string) {
   if (!ErrorCode.includes(code)) {

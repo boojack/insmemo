@@ -36,7 +36,7 @@ export namespace MemoController {
     const { content, uponMemoId } = ctx.request.body;
 
     if (!content) {
-      throw new Error("20001");
+      throw new Error("30001");
     }
 
     const memo = await MemoModel.createMemo(userId, content, uponMemoId);
@@ -53,7 +53,7 @@ export namespace MemoController {
     const { content, uponMemoId, createdAt, updatedAt } = ctx.request.body;
 
     if (!content) {
-      throw new Error("200001");
+      throw new Error("30001");
     }
 
     const memo = await MemoModel.saveLocalMemo(userId, content, createdAt, updatedAt, uponMemoId);
@@ -68,7 +68,7 @@ export namespace MemoController {
     const { memoId } = ctx.request.body;
 
     if (!memoId) {
-      throw new Error("20001");
+      throw new Error("30001");
     }
 
     await TagModel.deleteMemoTagByMemoId(memoId);
@@ -87,7 +87,7 @@ export namespace MemoController {
     const { memoId, content } = ctx.request.body;
 
     if (!content) {
-      throw new Error("20001");
+      throw new Error("30001");
     }
 
     const result = await MemoModel.updateMemoContent(memoId, content);

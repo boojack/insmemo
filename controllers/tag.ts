@@ -8,7 +8,7 @@ export namespace TagController {
     const { text } = ctx.request.body;
 
     if (!text) {
-      throw new Error("20001");
+      throw new Error("30001");
     }
     let tag = await TagModel.checkExist(userId, text);
     if (!tag) {
@@ -26,7 +26,7 @@ export namespace TagController {
     const { memoId, tagId } = ctx.request.body;
 
     if (!memoId || !tagId) {
-      throw new Error("20001");
+      throw new Error("30001");
     }
 
     const memoTag = await TagModel.createMemoTag(memoId, tagId);
@@ -42,7 +42,7 @@ export namespace TagController {
     const memoId = ctx.params.id as string;
 
     if (!Boolean(memoId)) {
-      throw new Error("20001");
+      throw new Error("30001");
     }
 
     const tags = await TagModel.getMemoTags(memoId);
@@ -70,7 +70,7 @@ export namespace TagController {
     const { tagId } = ctx.request.body;
 
     if (!Boolean(tagId)) {
-      throw new Error("20001");
+      throw new Error("30001");
     }
 
     await TagModel.deleteMemoTagByTagId(tagId);
