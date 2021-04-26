@@ -52,23 +52,6 @@ export namespace MemoController {
     };
   }
 
-  // save local memo
-  export async function saveLocalMemo(ctx: Context) {
-    const userId = ctx.cookies.get("user_id") as string;
-    const { content, uponMemoId, createdAt, updatedAt } = ctx.request.body;
-
-    if (!utils.isString(content)) {
-      throw new Error("30001");
-    }
-
-    const memo = await MemoModel.saveLocalMemo(userId, content, createdAt, updatedAt, uponMemoId);
-
-    ctx.body = {
-      succeed: true,
-      data: memo,
-    };
-  }
-
   export async function deleteMemo(ctx: Context) {
     const { memoId } = ctx.request.body;
 

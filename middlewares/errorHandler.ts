@@ -5,15 +5,15 @@ export async function errorHandler(ctx: Context, next: Next) {
   try {
     await next();
   } catch (error) {
-    const err = getErrorInfo(error.message);
+    const errorInfo = getErrorInfo(error.message);
 
-    ctx.status = err.statusCode;
+    ctx.status = errorInfo.statusCode;
     ctx.body = {
       succeed: false,
-      status: err.statusCode ?? 500,
-      message: `${err.message}`,
+      status: errorInfo.statusCode ?? 500,
+      message: `${errorInfo.message}`,
       data: null,
     };
-    console.error("Error handler:", error, error.message);
+    console.error("Error handler:", error.message, errorInfo);
   }
 }

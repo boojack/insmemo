@@ -10,6 +10,5 @@ memoRouter.use(validSigninCookie);
 memoRouter.get("/", MemoController.getMemoById);
 memoRouter.get("/all", MemoController.getMemos);
 memoRouter.post("/new", MemoController.createMemo);
-memoRouter.post("/new/local", MemoController.saveLocalMemo);
 memoRouter.post("/delete", MemoController.deleteMemo);
 memoRouter.post("/update", MemoController.updateMemo);
