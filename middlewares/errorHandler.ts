@@ -12,6 +12,7 @@ export async function errorHandler(ctx: Context, next: Next) {
       succeed: false,
       status: err.statusCode ?? 500,
       message: `${err.message}`,
+      data: null,
     };
     console.error("Error handler:", error, error.message);
   }

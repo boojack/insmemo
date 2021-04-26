@@ -21,7 +21,7 @@ export namespace TagModel {
    * @param text
    */
   export function createTag(userId: string, text: string): Promise<TagType> {
-    const nowTimeStr = utils.getNowTimeString();
+    const nowTimeStr = utils.getTimeString();
     const tag: TagType = {
       id: utils.genUUID(),
       userId,
@@ -111,7 +111,7 @@ export namespace TagModel {
     const sql = `DELETE FROM memo_tag WHERE memo_id=?`;
 
     return new Promise((resolve, reject) => {
-      DB.conn.query(sql, [memoId], (err, result) => {
+      DB.conn.query(sql, [memoId], (err) => {
         if (err) {
           reject(err);
         } else {
@@ -125,7 +125,7 @@ export namespace TagModel {
     const sql = `DELETE FROM memo_tag WHERE tag_id=?`;
 
     return new Promise((resolve, reject) => {
-      DB.conn.query(sql, [tagId], (err, result) => {
+      DB.conn.query(sql, [tagId], (err) => {
         if (err) {
           reject(err);
         } else {

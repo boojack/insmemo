@@ -7,8 +7,8 @@ export const tagRouter = new Router({
 });
 
 tagRouter.use(validSigninCookie);
-tagRouter.get("/memo/:id", TagController.getTagsByMemoId);
-tagRouter.post("/new", TagController.createTag);
-tagRouter.post("/con", TagController.createMemoTag);
 tagRouter.get("/all", TagController.getMyTags);
+tagRouter.get("/memo", TagController.getTagsByMemoId);
+tagRouter.post("/new", TagController.createTag);
+tagRouter.post("/link", TagController.linkMemoTag);
 tagRouter.post("/delete", TagController.deleteTagById);

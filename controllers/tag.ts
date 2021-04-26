@@ -1,4 +1,5 @@
 import { Context } from "koa";
+import { utils } from "../helpers/utils";
 import { TagModel } from "../models/TagModel";
 
 export namespace TagController {
@@ -7,9 +8,10 @@ export namespace TagController {
     const userId = ctx.cookies.get("user_id") as string;
     const { text } = ctx.request.body;
 
-    if (!text) {
+    if (!utils.isString(text)) {
       throw new Error("30001");
     }
+
     let tag = await TagModel.checkExist(userId, text);
     if (!tag) {
       tag = await TagModel.createTag(userId, text);
@@ -22,10 +24,10 @@ export namespace TagController {
   }
 
   // connect memo with tag
-  export async function createMemoTag(ctx: Context) {
+  export async function linkMemoTag(ctx: Context) {
     const { memoId, tagId } = ctx.request.body;
 
-    if (!memoId || !tagId) {
+    if (!utils.isString(memoId) || !utils.isString(tagId)) {
       throw new Error("30001");
     }
 
@@ -39,13 +41,13 @@ export namespace TagController {
 
   // get memo tags
   export async function getTagsByMemoId(ctx: Context) {
-    const memoId = ctx.params.id as string;
+    const { id: memoId } = ctx.query;
 
-    if (!Boolean(memoId)) {
+    if (!utils.isString(memoId)) {
       throw new Error("30001");
     }
 
-    const tags = await TagModel.getMemoTags(memoId);
+    const tags = await TagModel.getMemoTags(memoId as string);
 
     ctx.body = {
       succeed: true,
@@ -69,7 +71,7 @@ export namespace TagController {
   export async function deleteTagById(ctx: Context) {
     const { tagId } = ctx.request.body;
 
-    if (!Boolean(tagId)) {
+    if (!utils.isString(tagId)) {
       throw new Error("30001");
     }
 

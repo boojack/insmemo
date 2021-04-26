@@ -1,4 +1,5 @@
 import { Context } from "koa";
+import { utils } from "../helpers/utils";
 import { MemoModel } from "../models/MemoModel";
 import { TagModel } from "../models/TagModel";
 
@@ -20,9 +21,13 @@ export namespace MemoController {
 
   // get memo by id
   export async function getMemoById(ctx: Context) {
-    const id = ctx.params.id as string;
+    const { id } = ctx.query;
 
-    const memo = await MemoModel.getMemoById(id);
+    if (!utils.isString(id)) {
+      throw new Error("30001");
+    }
+
+    const memo = await MemoModel.getMemoById(id as string);
 
     ctx.body = {
       succeed: true,
@@ -35,7 +40,7 @@ export namespace MemoController {
     const userId = ctx.cookies.get("user_id") as string;
     const { content, uponMemoId } = ctx.request.body;
 
-    if (!content) {
+    if (!utils.isString(content)) {
       throw new Error("30001");
     }
 
@@ -52,7 +57,7 @@ export namespace MemoController {
     const userId = ctx.cookies.get("user_id") as string;
     const { content, uponMemoId, createdAt, updatedAt } = ctx.request.body;
 
-    if (!content) {
+    if (!utils.isString(content)) {
       throw new Error("30001");
     }
 
@@ -67,10 +72,11 @@ export namespace MemoController {
   export async function deleteMemo(ctx: Context) {
     const { memoId } = ctx.request.body;
 
-    if (!memoId) {
+    if (!utils.isString(memoId)) {
       throw new Error("30001");
     }
 
+    // 删除 memo_tag
     await TagModel.deleteMemoTagByMemoId(memoId);
     const result = await MemoModel.deleteMemoByID(memoId);
     if (!result) {
@@ -86,7 +92,7 @@ export namespace MemoController {
   export async function updateMemo(ctx: Context) {
     const { memoId, content } = ctx.request.body;
 
-    if (!content) {
+    if (!utils.isString(memoId) || !utils.isString(content)) {
       throw new Error("30001");
     }
 

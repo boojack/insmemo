@@ -13,7 +13,7 @@ interface MemoType {
 export namespace MemoModel {
   export function createMemo(userId: string, content: string, uponMemoId?: string): Promise<MemoType> {
     const sql = `INSERT INTO memos (id, content, user_id, upon_memo_id, created_at, updated_at) VALUES (?)`;
-    const nowTimeStr = utils.getNowTimeString();
+    const nowTimeStr = utils.getTimeString();
     const memo: MemoType = {
       id: utils.genUUID(),
       content,
@@ -36,7 +36,7 @@ export namespace MemoModel {
 
   export function saveLocalMemo(userId: string, content: string, createdAt: string, updatedAt: string, uponMemoId?: string): Promise<MemoType> {
     const sql = `INSERT INTO memos (id, content, user_id, upon_memo_id, created_at, updated_at) VALUES (?)`;
-    const nowTimeStr = utils.getNowTimeString();
+    const nowTimeStr = utils.getTimeString();
     const memo: MemoType = {
       id: utils.genUUID(),
       content,
@@ -87,7 +87,7 @@ export namespace MemoModel {
 
   export function updateMemoContent(memoId: string, content: string): Promise<boolean> {
     const sql = `UPDATE memos SET content=?, updated_at=? WHERE id=?`;
-    const nowTimeStr = utils.getNowTimeString();
+    const nowTimeStr = utils.getTimeString();
 
     return new Promise((resolve, reject) => {
       DB.conn.query(sql, [content, nowTimeStr, memoId], (err) => {

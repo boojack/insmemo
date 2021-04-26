@@ -1,16 +1,17 @@
 const Errors: IterObject = {
-  "20001": "Sign in first plz",
-  "20002": "Username is unusable",
-  "20003": "Sign up/in failed",
+  "20001": "请先登录",
+  "20002": "用户名不可用",
+  "20003": "注册失败，请稍候再试",
+  "20004": "登录失败，请检查账号密码是否正确",
 
   // 客户端请求数据格式错误
-  "30001": "Request body type is illegal",
+  "30001": "请求数据错误",
 
-  "40001": "Unknown error",
+  "40001": "未知领域的错误",
 
   // 服务端出错
-  "50001": "Server is not working normal",
-  "50002": "Database error",
+  "50001": "服务器出错啦，请稍候再试",
+  "50002": "数据库挂啦，请稍候再试",
 };
 const ErrorCode = Object.keys(Errors);
 

@@ -7,7 +7,7 @@ export const memoRouter = new Router({
 });
 
 memoRouter.use(validSigninCookie);
-memoRouter.get("/i/:id", MemoController.getMemoById);
+memoRouter.get("/", MemoController.getMemoById);
 memoRouter.get("/all", MemoController.getMemos);
 memoRouter.post("/new", MemoController.createMemo);
 memoRouter.post("/new/local", MemoController.saveLocalMemo);

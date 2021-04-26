@@ -58,7 +58,7 @@ export namespace UserController {
     const user = await UserModel.validSigninInfo(username, password);
 
     if (!user) {
-      throw new Error("20003");
+      throw new Error("20004");
     }
 
     ctx.cookies.set("user_id", user.id, {
