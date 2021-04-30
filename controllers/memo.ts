@@ -8,8 +8,8 @@ export namespace MemoController {
   export async function getMemos(ctx: Context) {
     const userId = ctx.cookies.get("user_id") as string;
     const { offset: offsetStr, amount: amountStr } = ctx.query;
-    let offset = parseInt(offsetStr as string) | 0;
-    let amount = parseInt(amountStr as string) | 20;
+    let offset = parseInt(offsetStr as string) || 0;
+    let amount = parseInt(amountStr as string) || 20;
 
     const memos = await MemoModel.getMemosByUserId(userId, offset, amount);
 

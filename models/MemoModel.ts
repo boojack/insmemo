@@ -34,7 +34,13 @@ export namespace MemoModel {
     });
   }
 
-  export function saveLocalMemo(userId: string, content: string, createdAt: string, updatedAt: string, uponMemoId?: string): Promise<MemoType> {
+  export function saveLocalMemo(
+    userId: string,
+    content: string,
+    createdAt: string,
+    updatedAt: string,
+    uponMemoId?: string
+  ): Promise<MemoType> {
     const sql = `INSERT INTO memos (id, content, user_id, upon_memo_id, created_at, updated_at) VALUES (?)`;
     const nowTimeStr = utils.getTimeString();
     const memo: MemoType = {
@@ -58,7 +64,7 @@ export namespace MemoModel {
   }
 
   export function getMemosByUserId(userId: string, offset: number, amount: number = 20): Promise<MemoType[]> {
-    const sql = `SELECT * FROM memos WHERE user_id=? ORDER BY updated_at LIMIT ${amount} OFFSET ${offset}`;
+    const sql = `SELECT * FROM memos WHERE user_id=? ORDER BY created_at DESC LIMIT ${amount} OFFSET ${offset}`;
 
     return new Promise((resolve, reject) => {
       DB.conn.query(sql, [userId], (err, result) => {
