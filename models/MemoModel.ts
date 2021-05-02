@@ -63,6 +63,20 @@ export namespace MemoModel {
     });
   }
 
+  export function countMemosByUserId(userId: string): Promise<number> {
+    const sql = `SELECT COUNT(*) as count FROM memos WHERE user_id=?`;
+
+    return new Promise((resolve, reject) => {
+      DB.conn.query(sql, [userId], (err, result) => {
+        if (err) {
+          reject(err);
+        } else {
+          resolve((DB.parseResult(result) as any[])[0].count as number);
+        }
+      });
+    });
+  }
+
   export function getMemosByUserId(userId: string, offset: number, amount: number = 20): Promise<MemoType[]> {
     const sql = `SELECT * FROM memos WHERE user_id=? ORDER BY created_at DESC LIMIT ${amount} OFFSET ${offset}`;
 

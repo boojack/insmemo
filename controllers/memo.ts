@@ -19,6 +19,18 @@ export namespace MemoController {
     };
   }
 
+  // get memos count
+  export async function getMemosCount(ctx: Context) {
+    const userId = ctx.cookies.get("user_id") as string;
+
+    const count = await MemoModel.countMemosByUserId(userId);
+
+    ctx.body = {
+      succeed: true,
+      data: count,
+    };
+  }
+
   // get memo by id
   export async function getMemoById(ctx: Context) {
     const { id } = ctx.query;
