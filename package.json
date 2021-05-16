@@ -4,7 +4,8 @@
   "author": "boojack <imrealleonardo@gmail.com>",
   "license": "",
   "scripts": {
-    "dev": "nodemon --watch '**/*.ts' --exec cross-env NODE_ENV=dev ts-node --files ./server.ts"
+    "dev": "nodemon --watch '**/*.ts' --exec cross-env NODE_ENV=dev ts-node --files ./server.ts",
+    "build": "tsc --project ./"
   },
   "dependencies": {
     "@koa/cors": "^3.1.0",
