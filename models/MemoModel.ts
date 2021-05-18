@@ -141,8 +141,8 @@ export namespace MemoModel {
 //   content TEXT NOT NULL,
 //   user_id VARCHAR(36) NOT NULL,
 //   upon_memo_id VARCHAR(36),
-//   created_at TIMESTAMP NOT NULL,
-//   updated_at TIMESTAMP NOT NULL,
+//   created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+//   updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
 //   PRIMARY KEY(id),
 //   FOREIGN KEY(user_id) REFERENCES users(id)
 // )

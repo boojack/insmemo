@@ -91,8 +91,8 @@ export namespace UserModel {
 //   id VARCHAR(36) NOT NULL,
 //   username VARCHAR(32) NOT NULL,
 //   password VARCHAR(32) NOT NULL,
-//   created_at TIMESTAMP NOT NULL,
-//   updated_at TIMESTAMP NOT NULL,
+//   created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+//   updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
 //   PRIMARY KEY(id)
 // )
 // `;
