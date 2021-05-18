@@ -118,7 +118,7 @@ export namespace TagModel {
         }
 
         const data = DB.parseResult(result) as TagType[];
-        if (Array.isArray(data) && data.length > 0) {
+        if (Array.isArray(data)) {
           resolve(data[0]);
         } else {
           reject("Error in database.");
