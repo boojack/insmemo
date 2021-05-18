@@ -5,6 +5,7 @@ import { TagModel } from "../models/TagModel";
 
 export namespace MemoController {
   // get memos by userid in cookie
+  // example: /api/memo/all?offset=0&amount=20
   export async function getMemos(ctx: Context) {
     const userId = ctx.cookies.get("user_id") as string;
     const { offset: offsetStr, amount: amountStr } = ctx.query;

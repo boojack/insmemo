@@ -21,7 +21,7 @@ export namespace TagModel {
    * @param text
    */
   export function createTag(userId: string, text: string): Promise<TagType> {
-    const nowTimeStr = utils.getTimeString();
+    const nowTimeStr = utils.getNowTimeString();
     const tag: TagType = {
       id: utils.genUUID(),
       userId,
@@ -34,9 +34,10 @@ export namespace TagModel {
       DB.conn.query(sql, [Object.values(tag)], (err) => {
         if (err) {
           reject(err);
-        } else {
-          resolve(tag);
+          return;
         }
+
+        resolve(tag);
       });
     });
   }
@@ -58,9 +59,10 @@ export namespace TagModel {
       DB.conn.query(sql, [Object.values(memoTag)], (err) => {
         if (err) {
           reject(err);
-        } else {
-          resolve(memoTag);
+          return;
         }
+
+        resolve(memoTag);
       });
     });
   }
@@ -72,22 +74,34 @@ export namespace TagModel {
       DB.conn.query(sql, [userId], (err, result) => {
         if (err) {
           reject(err);
+          return;
+        }
+
+        const data = DB.parseResult(result) as TagType[];
+        if (Array.isArray(data)) {
+          resolve(data);
         } else {
-          resolve(DB.parseResult(result) as TagType[]);
+          reject("Error in database.");
         }
       });
     });
   }
 
-  export function getMemoTags(memoId: string): Promise<any[]> {
+  export function getMemoTags(memoId: string): Promise<TagType[]> {
     const sql = `SELECT t.id id, t.text text FROM tags t, memo_tag mt WHERE mt.memo_id=? AND t.id=mt.tag_id`;
 
     return new Promise((resolve, reject) => {
       DB.conn.query(sql, [memoId], (err, result) => {
         if (err) {
           reject(err);
+          return;
+        }
+
+        const data = DB.parseResult(result) as TagType[];
+        if (Array.isArray(data)) {
+          resolve(data);
         } else {
-          resolve(DB.parseResult(result) as any[]);
+          reject("Error in database.");
         }
       });
     });
@@ -100,8 +114,14 @@ export namespace TagModel {
       DB.conn.query(sql, [userId, text], (err, result) => {
         if (err) {
           reject(err);
+          return;
+        }
+
+        const data = DB.parseResult(result) as TagType[];
+        if (Array.isArray(data) && data.length > 0) {
+          resolve(data[0]);
         } else {
-          resolve((DB.parseResult(result) as TagType[])[0]);
+          reject("Error in database.");
         }
       });
     });
@@ -114,9 +134,10 @@ export namespace TagModel {
       DB.conn.query(sql, [memoId], (err) => {
         if (err) {
           reject(err);
-        } else {
-          resolve(true);
+          return;
         }
+
+        resolve(true);
       });
     });
   }
@@ -128,9 +149,10 @@ export namespace TagModel {
       DB.conn.query(sql, [tagId], (err) => {
         if (err) {
           reject(err);
-        } else {
-          resolve(true);
+          return;
         }
+
+        resolve(true);
       });
     });
   }
@@ -142,9 +164,10 @@ export namespace TagModel {
       DB.conn.query(sql, [tagId], (err, result) => {
         if (err) {
           reject(err);
-        } else {
-          resolve(true);
+          return;
         }
+
+        resolve(true);
       });
     });
   }

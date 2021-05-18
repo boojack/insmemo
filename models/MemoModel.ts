@@ -13,7 +13,7 @@ interface MemoType {
 export namespace MemoModel {
   export function createMemo(userId: string, content: string, uponMemoId?: string): Promise<MemoType> {
     const sql = `INSERT INTO memos (id, content, user_id, upon_memo_id, created_at, updated_at) VALUES (?)`;
-    const nowTimeStr = utils.getTimeString();
+    const nowTimeStr = utils.getNowTimeString();
     const memo: MemoType = {
       id: utils.genUUID(),
       content,
@@ -27,9 +27,10 @@ export namespace MemoModel {
       DB.conn.query(sql, [Object.values(memo)], (err) => {
         if (err) {
           reject(err);
-        } else {
-          resolve(memo);
+          return;
         }
+
+        resolve(memo);
       });
     });
   }
@@ -42,7 +43,7 @@ export namespace MemoModel {
     uponMemoId?: string
   ): Promise<MemoType> {
     const sql = `INSERT INTO memos (id, content, user_id, upon_memo_id, created_at, updated_at) VALUES (?)`;
-    const nowTimeStr = utils.getTimeString();
+    const nowTimeStr = utils.getNowTimeString();
     const memo: MemoType = {
       id: utils.genUUID(),
       content,
@@ -56,9 +57,10 @@ export namespace MemoModel {
       DB.conn.query(sql, [Object.values(memo)], (err) => {
         if (err) {
           reject(err);
-        } else {
-          resolve(memo);
+          return;
         }
+
+        resolve(memo);
       });
     });
   }
@@ -70,8 +72,14 @@ export namespace MemoModel {
       DB.conn.query(sql, [userId], (err, result) => {
         if (err) {
           reject(err);
+        }
+
+        const data = DB.parseResult(result) as any[];
+
+        if (Array.isArray(data) && data.length > 0) {
+          resolve(data[0].count as number);
         } else {
-          resolve((DB.parseResult(result) as any[])[0].count as number);
+          reject("Error in database.");
         }
       });
     });
@@ -84,8 +92,15 @@ export namespace MemoModel {
       DB.conn.query(sql, [userId], (err, result) => {
         if (err) {
           reject(err);
+          return;
+        }
+
+        const data = DB.parseResult(result) as MemoType[];
+
+        if (Array.isArray(data)) {
+          resolve(data);
         } else {
-          resolve(DB.parseResult(result) as MemoType[]);
+          reject("Error in database.");
         }
       });
     });
@@ -98,8 +113,15 @@ export namespace MemoModel {
       DB.conn.query(sql, [id], (err, result) => {
         if (err) {
           reject(err);
+          return;
+        }
+
+        const data = DB.parseResult(result) as MemoType[];
+
+        if (Array.isArray(data) && data.length > 0) {
+          resolve(data[0]);
         } else {
-          resolve((DB.parseResult(result) as MemoType[])[0]);
+          reject("Error in database.");
         }
       });
     });
@@ -107,15 +129,16 @@ export namespace MemoModel {
 
   export function updateMemoContent(memoId: string, content: string): Promise<boolean> {
     const sql = `UPDATE memos SET content=?, updated_at=? WHERE id=?`;
-    const nowTimeStr = utils.getTimeString();
+    const nowTimeStr = utils.getNowTimeString();
 
     return new Promise((resolve, reject) => {
       DB.conn.query(sql, [content, nowTimeStr, memoId], (err) => {
         if (err) {
           reject(err);
-        } else {
-          resolve(true);
+          return;
         }
+
+        resolve(true);
       });
     });
   }
@@ -127,9 +150,10 @@ export namespace MemoModel {
       DB.conn.query(sql, [memoId], (err) => {
         if (err) {
           reject(err);
-        } else {
-          resolve(true);
+          return;
         }
+
+        resolve(true);
       });
     });
   }

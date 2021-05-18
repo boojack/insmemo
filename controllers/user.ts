@@ -8,10 +8,10 @@ export namespace UserController {
    */
   export async function getMyUserInfo(ctx: Context) {
     const userId = ctx.cookies.get("user_id") as string;
-    const user = await UserModel.getUserInfoById(userId);
+    const userinfo = await UserModel.getUserInfoById(userId);
 
     // 数据去敏
-    const data = user as IterObject;
+    const data = userinfo as IterObject;
     delete data.password;
 
     ctx.body = {
