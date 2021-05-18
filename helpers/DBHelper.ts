@@ -1,4 +1,4 @@
-import { Connection, createConnection } from "mysql";
+import { Connection, createConnection } from "mysql2";
 import { utils } from "./utils";
 
 const connectionConfig = {

@@ -59,9 +59,9 @@ export namespace UserModel {
         if (err) {
           reject(err);
         } else {
-          result = DB.parseResult(result);
+          const data = DB.parseResult(result);
 
-          if (result && result.length > 0) {
+          if (Array.isArray(data) && data.length > 0) {
             resolve(false);
           } else {
             resolve(true);
