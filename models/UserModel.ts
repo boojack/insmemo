@@ -49,7 +49,7 @@ export namespace UserModel {
         }
 
         const data = DB.parseResult(results) as UserType[];
-        if (Array.isArray(data) && data.length > 0) {
+        if (Array.isArray(data)) {
           resolve(data[0]);
         } else {
           reject("Error in database.");
@@ -90,7 +90,7 @@ export namespace UserModel {
         }
 
         const data = DB.parseResult(results) as UserType[];
-        if (Array.isArray(data) && data.length > 0) {
+        if (Array.isArray(data)) {
           resolve(data[0]);
         } else {
           reject("Error in database.");
