@@ -14,7 +14,7 @@ export namespace utils {
   }
 
   // For example: 2021-4-8 17:52:17
-  export function getNowTimeString(d: Date | number | string = Date.now()): string {
+  export function getTimeString(d: Date | number | string = Date.now()): string {
     const time = new Date(d);
 
     const year = time.getFullYear();

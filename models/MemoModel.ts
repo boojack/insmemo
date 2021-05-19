@@ -13,7 +13,7 @@ interface MemoType {
 export namespace MemoModel {
   export function createMemo(userId: string, content: string, uponMemoId?: string): Promise<MemoType> {
     const sql = `INSERT INTO memos (id, content, user_id, upon_memo_id, created_at, updated_at) VALUES (?)`;
-    const nowTimeStr = utils.getNowTimeString();
+    const nowTimeStr = utils.getTimeString();
     const memo: MemoType = {
       id: utils.genUUID(),
       content,
@@ -21,36 +21,6 @@ export namespace MemoModel {
       uponMemoId,
       createdAt: nowTimeStr,
       updatedAt: nowTimeStr,
-    };
-
-    return new Promise((resolve, reject) => {
-      DB.conn.query(sql, [Object.values(memo)], (err) => {
-        if (err) {
-          reject(err);
-          return;
-        }
-
-        resolve(memo);
-      });
-    });
-  }
-
-  export function saveLocalMemo(
-    userId: string,
-    content: string,
-    createdAt: string,
-    updatedAt: string,
-    uponMemoId?: string
-  ): Promise<MemoType> {
-    const sql = `INSERT INTO memos (id, content, user_id, upon_memo_id, created_at, updated_at) VALUES (?)`;
-    const nowTimeStr = utils.getNowTimeString();
-    const memo: MemoType = {
-      id: utils.genUUID(),
-      content,
-      userId,
-      uponMemoId,
-      createdAt: createdAt || nowTimeStr,
-      updatedAt: updatedAt || nowTimeStr,
     };
 
     return new Promise((resolve, reject) => {
@@ -106,6 +76,37 @@ export namespace MemoModel {
     });
   }
 
+  export function getMemosWithDuration(userId: string, from: Date, to: Date, offset: number, amount: number = 20): Promise<MemoType[]> {
+    const sql = `
+      SELECT * FROM memos 
+      WHERE 
+        user_id=?
+        ${Boolean(from) ? "AND created_at > '" + utils.getTimeString(from) + "'" : ""} 
+        ${Boolean(to) ? "AND created_at < '" + utils.getTimeString(to) + "'" : ""} 
+      ORDER BY created_at 
+      DESC 
+      LIMIT ${amount} 
+      OFFSET ${offset}
+    `;
+
+    return new Promise((resolve, reject) => {
+      DB.conn.query(sql, [userId], (err, result) => {
+        if (err) {
+          reject(err);
+          return;
+        }
+
+        const data = DB.parseResult(result) as MemoType[];
+
+        if (Array.isArray(data)) {
+          resolve(data);
+        } else {
+          reject("Error in database.");
+        }
+      });
+    });
+  }
+
   export function getMemoById(id: string): Promise<MemoType> {
     const sql = `SELECT * FROM memos WHERE id=?`;
 
@@ -129,7 +130,7 @@ export namespace MemoModel {
 
   export function updateMemoContent(memoId: string, content: string): Promise<boolean> {
     const sql = `UPDATE memos SET content=?, updated_at=? WHERE id=?`;
-    const nowTimeStr = utils.getNowTimeString();
+    const nowTimeStr = utils.getTimeString();
 
     return new Promise((resolve, reject) => {
       DB.conn.query(sql, [content, nowTimeStr, memoId], (err) => {

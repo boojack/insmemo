@@ -16,7 +16,7 @@ export namespace UserModel {
    * @param password
    */
   export function createUser(username: string, password: string): Promise<UserType> {
-    const nowTimeStr = utils.getNowTimeString();
+    const nowTimeStr = utils.getTimeString();
     const user: UserType = {
       id: utils.genUUID(),
       username,
