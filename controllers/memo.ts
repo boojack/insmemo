@@ -12,7 +12,15 @@ export namespace MemoController {
     let offset = parseInt(offsetStr as string) || 0;
     let amount = parseInt(amountStr as string) || 20;
 
-    const memos = await MemoModel.getMemosByUserId(userId, offset, amount);
+    const memos: any[] = await MemoModel.getMemosByUserId(userId, offset, amount);
+
+    for (const m of memos) {
+      m.tags = await TagModel.getMemoTags(m.id);
+
+      if (m.uponMemoId) {
+        m.uponMemo = await MemoModel.getMemoById(m.uponMemoId);
+      }
+    }
 
     ctx.body = {
       succeed: true,
