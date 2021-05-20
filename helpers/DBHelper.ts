@@ -1,12 +1,6 @@
 import { Connection, createConnection } from "mysql2";
+import { connectionConfig } from "./config";
 import { utils } from "./utils";
-
-const connectionConfig = {
-  host: "localhost",
-  user: "root",
-  password: "root",
-  database: "insmemo",
-};
 
 export namespace DB {
   export let conn: Connection;
