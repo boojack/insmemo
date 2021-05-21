@@ -67,6 +67,21 @@ export namespace TagModel {
     });
   }
 
+  export function increaseTagLevel(tagId: string): Promise<boolean> {
+    const sql = `UPDATE tags SET level=level+1 WHERE id=?`;
+
+    return new Promise((resolve, reject) => {
+      DB.conn.query(sql, [tagId], (err) => {
+        if (err) {
+          reject(err);
+          return;
+        }
+
+        resolve(true);
+      });
+    });
+  }
+
   export function getTagsByUserId(userId: string): Promise<TagType[]> {
     const sql = `SELECT * FROM tags WHERE user_id=?`;
 

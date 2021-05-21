@@ -15,11 +15,29 @@ export namespace TagController {
     let tag = await TagModel.checkExist(userId, text);
     if (!tag) {
       tag = await TagModel.createTag(userId, text);
+    } else {
+      await TagModel.increaseTagLevel(tag.id);
     }
 
     ctx.body = {
       succeed: true,
       data: tag,
+    };
+  }
+
+  // polish tag
+  export async function polishTag(ctx: Context) {
+    const { tagId } = ctx.request.body;
+
+    if (!utils.isString(tagId)) {
+      throw new Error("30001");
+    }
+
+    const result = await TagModel.increaseTagLevel(tagId);
+
+    ctx.body = {
+      succeed: true,
+      data: result,
     };
   }
 
