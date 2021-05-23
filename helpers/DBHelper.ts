@@ -48,4 +48,20 @@ export namespace DB {
       return null;
     }
   }
+
+  export function checkStatus(): Promise<Boolean> {
+    return new Promise((resolve, reject) => {
+      if (Boolean(conn)) {
+        DB.conn.ping((err) => {
+          if (err) {
+            console.error(err);
+            resolve(false);
+          } else {
+            resolve(true);
+          }
+        });
+      }
+      resolve(false);
+    });
+  }
 }
