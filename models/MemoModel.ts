@@ -11,7 +11,7 @@ interface MemoType {
 }
 
 export namespace MemoModel {
-  export function createMemo(userId: string, content: string, uponMemoId?: string): Promise<MemoType> {
+  export async function createMemo(userId: string, content: string, uponMemoId?: string): Promise<MemoType> {
     const sql = `INSERT INTO memos (id, content, user_id, upon_memo_id, created_at, updated_at) VALUES (?)`;
     const nowTimeStr = utils.getTimeString();
     const memo: MemoType = {
@@ -23,60 +23,40 @@ export namespace MemoModel {
       updatedAt: nowTimeStr,
     };
 
-    return new Promise((resolve, reject) => {
-      DB.conn.query(sql, [Object.values(memo)], (err) => {
-        if (err) {
-          reject(err);
-          return;
-        }
-
-        resolve(memo);
-      });
-    });
+    await DB.query(sql, [Object.values(memo)]);
+    return memo;
   }
 
-  export function countMemosByUserId(userId: string): Promise<number> {
+  export async function countMemosByUserId(userId: string): Promise<number> {
     const sql = `SELECT COUNT(*) as count FROM memos WHERE user_id=?`;
 
-    return new Promise((resolve, reject) => {
-      DB.conn.query(sql, [userId], (err, result) => {
-        if (err) {
-          reject(err);
-        }
-
-        const data = DB.parseResult(result) as any[];
-
-        if (Array.isArray(data) && data.length > 0) {
-          resolve(data[0].count as number);
-        } else {
-          reject("Error in database.");
-        }
-      });
-    });
+    const data = await DB.query(sql, [userId]);
+    if (Array.isArray(data) && data.length > 0) {
+      return data[0].count as number;
+    } else {
+      return Promise.reject("Error in database.");
+    }
   }
 
-  export function getMemosByUserId(userId: string, offset: number, amount: number = 20): Promise<MemoType[]> {
+  export async function getMemosByUserId(userId: string, offset: number, amount: number = 20): Promise<MemoType[]> {
     const sql = `SELECT * FROM memos WHERE user_id=? ORDER BY created_at DESC LIMIT ${amount} OFFSET ${offset}`;
 
-    return new Promise((resolve, reject) => {
-      DB.conn.query(sql, [userId], (err, result) => {
-        if (err) {
-          reject(err);
-          return;
-        }
+    const data = await DB.query<MemoType[]>(sql, [userId]);
 
-        const data = DB.parseResult(result) as MemoType[];
-
-        if (Array.isArray(data)) {
-          resolve(data);
-        } else {
-          reject("Error in database.");
-        }
-      });
-    });
+    if (Array.isArray(data)) {
+      return data;
+    } else {
+      return Promise.reject("Error in database.");
+    }
   }
 
-  export function getMemosWithDuration(userId: string, from: Date, to: Date, offset: number, amount: number = 20): Promise<MemoType[]> {
+  export async function getMemosWithDuration(
+    userId: string,
+    from: Date,
+    to: Date,
+    offset: number = 0,
+    amount: number = 20
+  ): Promise<MemoType[]> {
     const sql = `
       SELECT * FROM memos 
       WHERE 
@@ -89,74 +69,38 @@ export namespace MemoModel {
       OFFSET ${offset}
     `;
 
-    return new Promise((resolve, reject) => {
-      DB.conn.query(sql, [userId], (err, result) => {
-        if (err) {
-          reject(err);
-          return;
-        }
-
-        const data = DB.parseResult(result) as MemoType[];
-
-        if (Array.isArray(data)) {
-          resolve(data);
-        } else {
-          reject("Error in database.");
-        }
-      });
-    });
+    const data = await DB.query<MemoType[]>(sql, [userId]);
+    if (Array.isArray(data)) {
+      return data;
+    } else {
+      return Promise.reject("Error in database.");
+    }
   }
 
-  export function getMemoById(id: string): Promise<MemoType> {
+  export async function getMemoById(id: string): Promise<MemoType> {
     const sql = `SELECT * FROM memos WHERE id=?`;
 
-    return new Promise((resolve, reject) => {
-      DB.conn.query(sql, [id], (err, result) => {
-        if (err) {
-          reject(err);
-          return;
-        }
-
-        const data = DB.parseResult(result) as MemoType[];
-
-        if (Array.isArray(data) && data.length > 0) {
-          resolve(data[0]);
-        } else {
-          reject("Error in database.");
-        }
-      });
-    });
+    const data = await DB.query<MemoType[]>(sql, [id]);
+    if (Array.isArray(data) && data.length > 0) {
+      return data[0];
+    } else {
+      return Promise.reject("Error in database.");
+    }
   }
 
-  export function updateMemoContent(memoId: string, content: string): Promise<boolean> {
+  export async function updateMemoContent(memoId: string, content: string): Promise<boolean> {
     const sql = `UPDATE memos SET content=?, updated_at=? WHERE id=?`;
     const nowTimeStr = utils.getTimeString();
 
-    return new Promise((resolve, reject) => {
-      DB.conn.query(sql, [content, nowTimeStr, memoId], (err) => {
-        if (err) {
-          reject(err);
-          return;
-        }
-
-        resolve(true);
-      });
-    });
+    await DB.query(sql, [content, nowTimeStr, memoId]);
+    return true;
   }
 
-  export function deleteMemoByID(memoId: string): Promise<boolean> {
+  export async function deleteMemoByID(memoId: string): Promise<boolean> {
     const sql = `DELETE FROM memos WHERE id=?`;
 
-    return new Promise((resolve, reject) => {
-      DB.conn.query(sql, [memoId], (err) => {
-        if (err) {
-          reject(err);
-          return;
-        }
-
-        resolve(true);
-      });
-    });
+    await DB.query(sql, [memoId]);
+    return true;
   }
 }
 

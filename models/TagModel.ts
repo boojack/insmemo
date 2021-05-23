@@ -20,7 +20,7 @@ export namespace TagModel {
    * @param userId
    * @param text
    */
-  export function createTag(userId: string, text: string): Promise<TagType> {
+  export async function createTag(userId: string, text: string): Promise<TagType> {
     const nowTimeStr = utils.getTimeString();
     const tag: TagType = {
       id: utils.genUUID(),
@@ -30,16 +30,8 @@ export namespace TagModel {
     };
     const sql = `INSERT INTO tags (id, user_id, text, created_at) VALUES (?)`;
 
-    return new Promise((resolve, reject) => {
-      DB.conn.query(sql, [Object.values(tag)], (err) => {
-        if (err) {
-          reject(err);
-          return;
-        }
-
-        resolve(tag);
-      });
-    });
+    await DB.query(sql, [Object.values(tag)]);
+    return tag;
   }
 
   /**
@@ -47,7 +39,7 @@ export namespace TagModel {
    * @param memoId
    * @param tagId
    */
-  export function createMemoTag(memoId: string, tagId: string): Promise<Object> {
+  export async function createMemoTag(memoId: string, tagId: string): Promise<Object> {
     const memoTag: MemoTagType = {
       id: utils.genUUID(),
       memoId,
@@ -55,136 +47,69 @@ export namespace TagModel {
     };
     const sql = `INSERT INTO memo_tag (id, memo_id, tag_id) VALUES (?)`;
 
-    return new Promise((resolve, reject) => {
-      DB.conn.query(sql, [Object.values(memoTag)], (err) => {
-        if (err) {
-          reject(err);
-          return;
-        }
-
-        resolve(memoTag);
-      });
-    });
+    await DB.query(sql, [Object.values(memoTag)]);
+    return memoTag;
   }
 
-  export function increaseTagLevel(tagId: string): Promise<boolean> {
+  export async function increaseTagLevel(tagId: string): Promise<boolean> {
     const sql = `UPDATE tags SET level=level+1 WHERE id=?`;
 
-    return new Promise((resolve, reject) => {
-      DB.conn.query(sql, [tagId], (err) => {
-        if (err) {
-          reject(err);
-          return;
-        }
-
-        resolve(true);
-      });
-    });
+    await DB.query(sql, [tagId]);
+    return true;
   }
 
-  export function getTagsByUserId(userId: string): Promise<TagType[]> {
+  export async function getTagsByUserId(userId: string): Promise<TagType[]> {
     const sql = `SELECT * FROM tags WHERE user_id=?`;
 
-    return new Promise((resolve, reject) => {
-      DB.conn.query(sql, [userId], (err, result) => {
-        if (err) {
-          reject(err);
-          return;
-        }
-
-        const data = DB.parseResult(result) as TagType[];
-        if (Array.isArray(data)) {
-          resolve(data);
-        } else {
-          reject("Error in database.");
-        }
-      });
-    });
+    const data = await DB.query(sql, [userId]);
+    if (Array.isArray(data)) {
+      return data;
+    } else {
+      return Promise.reject("Error in database.");
+    }
   }
 
-  export function getMemoTags(memoId: string): Promise<TagType[]> {
+  export async function getMemoTags(memoId: string): Promise<TagType[]> {
     const sql = `SELECT t.id id, t.text text FROM tags t, memo_tag mt WHERE mt.memo_id=? AND t.id=mt.tag_id`;
 
-    return new Promise((resolve, reject) => {
-      DB.conn.query(sql, [memoId], (err, result) => {
-        if (err) {
-          reject(err);
-          return;
-        }
-
-        const data = DB.parseResult(result) as TagType[];
-        if (Array.isArray(data)) {
-          resolve(data);
-        } else {
-          reject("Error in database.");
-        }
-      });
-    });
+    const data = await DB.query<TagType[]>(sql, [memoId]);
+    if (Array.isArray(data)) {
+      return data;
+    } else {
+      return Promise.reject("Error in database.");
+    }
   }
 
-  export function checkExist(userId: string, text: string): Promise<TagType> {
+  export async function checkExist(userId: string, text: string): Promise<TagType> {
     const sql = `SELECT * FROM tags WHERE user_id=? AND text=?`;
 
-    return new Promise((resolve, reject) => {
-      DB.conn.query(sql, [userId, text], (err, result) => {
-        if (err) {
-          reject(err);
-          return;
-        }
-
-        const data = DB.parseResult(result) as TagType[];
-        if (Array.isArray(data)) {
-          resolve(data[0]);
-        } else {
-          reject("Error in database.");
-        }
-      });
-    });
+    const data = await DB.query<TagType[]>(sql, [userId, text]);
+    if (Array.isArray(data)) {
+      return data[0];
+    } else {
+      return Promise.reject("Error in database.");
+    }
   }
 
-  export function deleteMemoTagByMemoId(memoId: string): Promise<boolean> {
+  export async function deleteMemoTagByMemoId(memoId: string): Promise<boolean> {
     const sql = `DELETE FROM memo_tag WHERE memo_id=?`;
 
-    return new Promise((resolve, reject) => {
-      DB.conn.query(sql, [memoId], (err) => {
-        if (err) {
-          reject(err);
-          return;
-        }
-
-        resolve(true);
-      });
-    });
+    await DB.query(sql, [memoId]);
+    return true;
   }
 
-  export function deleteMemoTagByTagId(tagId: string): Promise<boolean> {
+  export async function deleteMemoTagByTagId(tagId: string): Promise<boolean> {
     const sql = `DELETE FROM memo_tag WHERE tag_id=?`;
 
-    return new Promise((resolve, reject) => {
-      DB.conn.query(sql, [tagId], (err) => {
-        if (err) {
-          reject(err);
-          return;
-        }
-
-        resolve(true);
-      });
-    });
+    await DB.query(sql, [tagId]);
+    return true;
   }
 
-  export function deleteTagById(tagId: string): Promise<boolean> {
+  export async function deleteTagById(tagId: string): Promise<boolean> {
     const sql = `DELETE FROM tags WHERE id=?`;
 
-    return new Promise((resolve, reject) => {
-      DB.conn.query(sql, [tagId], (err, result) => {
-        if (err) {
-          reject(err);
-          return;
-        }
-
-        resolve(true);
-      });
-    });
+    await DB.query(sql, [tagId]);
+    return true;
   }
 }
 

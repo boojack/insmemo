@@ -1,31 +1,42 @@
-import { Connection, createConnection } from "mysql2";
+import { createPool, Pool, PoolConnection } from "mysql2";
 import { connectionConfig } from "./config";
 import { utils } from "./utils";
 
 export namespace DB {
-  export let conn: Connection;
+  let pool: Pool = createPool(connectionConfig);
 
-  export function connectToMySQL(): Promise<Connection> {
-    return new Promise((resolve, reject) => {
-      const conn = createConnection(connectionConfig);
+  export function query<T = any[]>(sql: string, values: any): Promise<T> {
+    return new Promise(async (resovle, reject) => {
+      const conn = await getConnection();
+      conn.query(sql, values, (err, result) => {
+        conn.release();
 
-      conn.connect((err) => {
         if (err) {
           reject(err);
         } else {
-          DB.conn = conn;
+          resovle(parseResult(result) as T);
+        }
+      });
+    });
+  }
+
+  function getConnection(): Promise<PoolConnection> {
+    return new Promise((resolve, reject) => {
+      if (!pool) {
+        pool = createPool(connectionConfig);
+      }
+
+      pool.getConnection((err, conn) => {
+        if (err) {
+          reject(err);
+        } else {
           resolve(conn);
         }
       });
     });
   }
 
-  /**
-   * 解析执行结果，
-   * @param result any 类型的数据结果
-   * @returns
-   */
-  export function parseResult(result: any): BasicType {
+  function parseResult(result: any): BasicType {
     if (result instanceof Array) {
       const parsedResult = [];
 
@@ -47,21 +58,5 @@ export namespace DB {
     } else {
       return null;
     }
-  }
-
-  export function checkStatus(): Promise<Boolean> {
-    return new Promise((resolve, reject) => {
-      if (Boolean(conn)) {
-        DB.conn.ping((err) => {
-          if (err) {
-            console.error(err);
-            resolve(false);
-          } else {
-            resolve(true);
-          }
-        });
-      }
-      resolve(false);
-    });
   }
 }

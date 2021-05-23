@@ -15,7 +15,7 @@ export namespace UserModel {
    * @param username
    * @param password
    */
-  export function createUser(username: string, password: string): Promise<UserType> {
+  export async function createUser(username: string, password: string): Promise<UserType> {
     const nowTimeStr = utils.getTimeString();
     const user: UserType = {
       id: utils.genUUID(),
@@ -26,77 +26,43 @@ export namespace UserModel {
     };
     const sql = "INSERT INTO users (id, username, password, created_at, updated_at) VALUES (?)";
 
-    return new Promise((resolve, reject) => {
-      DB.conn.query(sql, [Object.values(user)], (err) => {
-        if (err) {
-          reject(err);
-          return;
-        }
-
-        resolve(user);
-      });
-    });
+    await DB.query(sql, [Object.values(user)]);
+    return user;
   }
 
-  export function getUserInfoById(userId: string): Promise<UserType> {
+  export async function getUserInfoById(userId: string): Promise<UserType> {
     const sql = "SELECT * FROM users WHERE id=?";
 
-    return new Promise((resolve, reject) => {
-      DB.conn.query(sql, [userId], (err, results) => {
-        if (err) {
-          reject(err);
-          return;
-        }
-
-        const data = DB.parseResult(results) as UserType[];
-        if (Array.isArray(data)) {
-          resolve(data[0]);
-        } else {
-          reject("Error in database.");
-        }
-      });
-    });
+    const data = await DB.query<UserType[]>(sql, [userId]);
+    if (Array.isArray(data)) {
+      return data[0];
+    } else {
+      return Promise.reject("Error in database.");
+    }
   }
 
-  export function checkUsernameUsable(username: string): Promise<boolean> {
+  export async function checkUsernameUsable(username: string): Promise<boolean> {
     const sql = "SELECT * FROM users WHERE username=?";
 
-    return new Promise((resolve, reject) => {
-      DB.conn.query(sql, [username], (err, results) => {
-        if (err) {
-          reject(err);
-          return;
-        }
+    const data = await DB.query(sql, [username]);
 
-        const data = DB.parseResult(results);
-
-        if (Array.isArray(data) && data.length > 0) {
-          resolve(false);
-        } else {
-          resolve(true);
-        }
-      });
-    });
+    if (Array.isArray(data) && data.length > 0) {
+      return false;
+    } else {
+      return true;
+    }
   }
 
-  export function validSigninInfo(username: string, password: string): Promise<UserType> {
+  export async function validSigninInfo(username: string, password: string): Promise<UserType> {
     const sql = "SELECT * FROM users WHERE username=? AND password=?";
 
-    return new Promise((resolve, reject) => {
-      DB.conn.query(sql, [username, password], (err, results) => {
-        if (err) {
-          reject(err);
-          return;
-        }
+    const data = await DB.query(sql, [username, password]);
 
-        const data = DB.parseResult(results) as UserType[];
-        if (Array.isArray(data)) {
-          resolve(data[0]);
-        } else {
-          reject("Error in database.");
-        }
-      });
-    });
+    if (Array.isArray(data)) {
+      return data[0];
+    } else {
+      return Promise.reject("Error in database.");
+    }
   }
 }
 
