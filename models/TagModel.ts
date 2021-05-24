@@ -34,6 +34,17 @@ export namespace TagModel {
     return tag;
   }
 
+  export async function countTagsByUserId(userId: string): Promise<number> {
+    const sql = `SELECT COUNT(*) as count FROM tags WHERE user_id=?`;
+
+    const data = await DB.query(sql, [userId]);
+    if (Array.isArray(data) && data.length > 0) {
+      return data[0].count as number;
+    } else {
+      return Promise.reject("Error in database.");
+    }
+  }
+
   /**
    * create memotag
    * @param memoId

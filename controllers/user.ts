@@ -1,4 +1,6 @@
 import { Context } from "koa";
+import { MemoModel } from "../models/MemoModel";
+import { TagModel } from "../models/TagModel";
 import { UserModel } from "../models/UserModel";
 
 export namespace UserController {
@@ -79,6 +81,20 @@ export namespace UserController {
     ctx.body = {
       succeed: true,
       message: "sign out succeed",
+    };
+  }
+
+  export async function getDataAmount(ctx: Context) {
+    const userId = ctx.cookies.get("user_id") as string;
+    const memosAmount = await MemoModel.countMemosByUserId(userId);
+    const tagsAmount = await TagModel.countTagsByUserId(userId);
+
+    ctx.body = {
+      succeed: true,
+      data: {
+        memosAmount,
+        tagsAmount,
+      },
     };
   }
 }
