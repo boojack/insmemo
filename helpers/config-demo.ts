@@ -1,6 +1,6 @@
-import { ConnectionOptions } from "mysql2";
+import { ConnectionConfig } from "mysql";
 
-export const connectionConfig: ConnectionOptions = {
+export const connectionConfig: ConnectionConfig = {
   host: "localhost",
   user: "root",
   password: "root",

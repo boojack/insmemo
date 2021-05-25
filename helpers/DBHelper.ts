@@ -1,4 +1,4 @@
-import { createPool, Pool, PoolConnection } from "mysql2";
+import { createPool, Pool, PoolConnection } from "mysql";
 import { connectionConfig } from "./config";
 import { utils } from "./utils";
 
@@ -7,16 +7,20 @@ export namespace DB {
 
   export function query<T = any[]>(sql: string, values: any): Promise<T> {
     return new Promise(async (resovle, reject) => {
-      const conn = await getConnection();
-      conn.query(sql, values, (err, result) => {
-        conn.release();
+      try {
+        const conn = await getConnection();
+        conn.query(sql, values, (err, result) => {
+          conn.release();
 
-        if (err) {
-          reject(err);
-        } else {
-          resovle(parseResult(result) as T);
-        }
-      });
+          if (err) {
+            reject(err);
+          } else {
+            resovle(parseResult(result) as T);
+          }
+        });
+      } catch (error) {
+        reject(error);
+      }
     });
   }
 
