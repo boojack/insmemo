@@ -80,10 +80,14 @@ export namespace MemoController {
       throw new Error("30001");
     }
 
-    // 删除 memo_tag
-    await TagModel.deleteMemoTagByMemoId(memoId);
-    const result = await MemoModel.deleteMemoByID(memoId);
-    if (!result) {
+    try {
+      // 删除 memo_tag
+      await TagModel.deleteMemoTagByMemoId(memoId);
+      // 删除相关联的 uponmemo_id
+      await MemoModel.removeUponMemoRecordByID(memoId);
+      // 删除此 memo
+      await MemoModel.deleteMemoByID(memoId);
+    } catch (error) {
       throw new Error("50002");
     }
 

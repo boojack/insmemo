@@ -102,6 +102,13 @@ export namespace MemoModel {
     await DB.query(sql, [memoId]);
     return true;
   }
+
+  export async function removeUponMemoRecordByID(memoId: string): Promise<boolean> {
+    const sql = `UPDATE memos SET upon_memo_id="" WHERE upon_memo_id=?`;
+
+    await DB.query(sql, [memoId]);
+    return true;
+  }
 }
 
 // const createSql = `
