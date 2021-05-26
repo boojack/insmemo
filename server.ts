@@ -16,8 +16,8 @@ app.use(errorHandler);
 // 托管静态文件
 app.use(
   Serve("./web/dist/", {
-    // 缓存 1 小时
-    maxAge: 1000 * 60 * 60,
+    // 缓存 1 月
+    maxAge: 1000 * 60 * 60 * 24 * 30,
     defer: true,
   })
 );
