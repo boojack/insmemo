@@ -7,6 +7,7 @@ import { userRouter } from "./routers/user";
 import { memoRouter } from "./routers/memo";
 import { tagRouter } from "./routers/tag";
 import { wxRouter } from "./routers/wx";
+import { baseRouter } from "./routers/base";
 
 const app = new Koa();
 
@@ -37,6 +38,7 @@ app.use(userRouter.routes());
 app.use(memoRouter.routes());
 app.use(tagRouter.routes());
 app.use(wxRouter.routes());
+app.use(baseRouter.routes());
 
 app.listen(8080, () => {
   console.log("server started in :8080");
