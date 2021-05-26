@@ -1,7 +1,3 @@
-import fs from "fs";
-import http from "http";
-import https from "https";
-import path from "path";
 import Koa from "koa";
 import cors from "@koa/cors";
 import bodyParser from "koa-bodyparser";
@@ -33,27 +29,6 @@ app.use(userRouter.routes());
 app.use(memoRouter.routes());
 app.use(tagRouter.routes());
 
-const config = {
-  http: {
-    port: 8080,
-  },
-  https: {
-    port: 8081,
-    options: {
-      key: fs.readFileSync(path.resolve(process.cwd(), "certs/justsven.top.key"), "utf8").toString(),
-      cert: fs.readFileSync(path.resolve(process.cwd(), "certs/justsven.top.pem"), "utf8").toString(),
-    },
-  },
-};
-
-const appCallback = app.callback();
-
-const httpServer = http.createServer(appCallback);
-httpServer.listen(config.http.port, () => {
-  console.log("http server started");
-});
-
-const httpsServer = https.createServer(config.https.options, appCallback);
-httpsServer.listen(config.https.port, () => {
-  console.log("https server started");
+app.listen(8080, () => {
+  console.log("server started in :8080");
 });
