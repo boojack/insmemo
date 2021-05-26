@@ -1,4 +1,5 @@
 import { v4 as uuidv4 } from "uuid";
+import crypto from "crypto";
 
 export namespace utils {
   /**
@@ -49,5 +50,9 @@ export namespace utils {
 
   export function toFirstLowerCase(s: string): string {
     return s.replace(/^[A-Z]/g, (c) => c.toLowerCase());
+  }
+
+  export function getInsecureSHA1ofJSON(str: string) {
+    return crypto.createHash("sha1").update(str).digest("hex");
   }
 }
