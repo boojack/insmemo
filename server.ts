@@ -13,6 +13,15 @@ const app = new Koa();
 // 错误处理中间件
 app.use(errorHandler);
 
+// 托管静态文件
+app.use(
+  Serve("./web/dist/", {
+    // 缓存 1 小时
+    maxAge: 1000 * 60 * 60,
+    defer: true,
+  })
+);
+
 // 跨域（仅供 dev 使用）
 if (process.env.NODE_ENV === "dev") {
   app.use(
@@ -21,10 +30,8 @@ if (process.env.NODE_ENV === "dev") {
     })
   );
 }
-app.use(bodyParser());
 
-// static files server
-app.use(Serve("./web/dist/"));
+app.use(bodyParser());
 
 app.use(userRouter.routes());
 app.use(memoRouter.routes());

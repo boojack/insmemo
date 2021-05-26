@@ -10,19 +10,13 @@ export namespace WxController {
     const echostr = ctx.query.echostr;
     const nonce = ctx.query.nonce;
 
-    const oriArray = new Array();
-    oriArray[0] = nonce;
-    oriArray[1] = timestamp;
-    oriArray[2] = token;
-    oriArray.sort();
+    const original = [nonce, timestamp, token].sort().join("");
+    const sha1Code = utils.getInsecureSHA1ofStr(original);
 
-    const original = oriArray.join("");
-    const sha = utils.getInsecureSHA1ofJSON(original);
-
-    if (signature === sha) {
+    if (signature === sha1Code) {
       ctx.body = echostr;
     } else {
-      ctx.body = { message: "error" };
+      ctx.body = "wx validate error";
     }
   }
 }

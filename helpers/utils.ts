@@ -52,7 +52,7 @@ export namespace utils {
     return s.replace(/^[A-Z]/g, (c) => c.toLowerCase());
   }
 
-  export function getInsecureSHA1ofJSON(str: string) {
+  export function getInsecureSHA1ofStr(str: string) {
     return crypto.createHash("sha1").update(str).digest("hex");
   }
 }
