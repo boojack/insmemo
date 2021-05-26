@@ -5,4 +5,5 @@ export const baseRouter = new Router({
   prefix: "/api/base",
 });
 
-baseRouter.get("/srctype", BaseController.getUrlContentType);
+// 暂不提供
+// baseRouter.get("/srctype", BaseController.getUrlContentType);
