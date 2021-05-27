@@ -5,6 +5,7 @@ interface TagType {
   id: string;
   userId: string;
   text: string;
+  level: number;
   createdAt: string;
 }
 
@@ -26,9 +27,10 @@ export namespace TagModel {
       id: utils.genUUID(),
       userId,
       text,
+      level: 0,
       createdAt: nowTimeStr,
     };
-    const sql = `INSERT INTO tags (id, user_id, text, created_at) VALUES (?)`;
+    const sql = `INSERT INTO tags (id, user_id, text, level, created_at) VALUES (?)`;
 
     await DB.query(sql, [Object.values(tag)]);
     return tag;
@@ -129,6 +131,7 @@ export namespace TagModel {
 //   id VARCHAR(36) NOT NULL,
 //   user_id VARCHAR(36) NOT NULL,
 //   text VARCHAR(36) NOT NULL,
+//   level int UNSIGNED NOT NULL DEFAULT 0,
 //   created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
 //   PRIMARY KEY(id),
 //   FOREIGN KEY(user_id) REFERENCES users(id)
