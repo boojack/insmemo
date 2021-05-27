@@ -1,6 +1,7 @@
 import Koa from "koa";
 import cors from "@koa/cors";
 import bodyParser from "koa-bodyparser";
+import Mount from "koa-mount";
 import Serve from "koa-static";
 import { errorHandler } from "./middlewares/errorHandler";
 import { userRouter } from "./routers/user";
@@ -16,11 +17,24 @@ app.use(errorHandler);
 
 // 托管静态文件
 app.use(
-  Serve("./web/dist/", {
-    // 缓存 1 月
-    maxAge: 1000 * 60 * 60 * 24 * 30,
-    defer: true,
-  })
+  Mount(
+    "/",
+    Serve("./web/dist/", {
+      // 缓存 1 月
+      maxAge: 1000 * 60 * 60 * 24 * 30,
+      defer: true,
+    })
+  )
+);
+
+// 托管静态文件
+app.use(
+  Mount(
+    "/mp",
+    Serve("./statics/mp/", {
+      defer: true,
+    })
+  )
 );
 
 // 跨域（仅供 dev 使用）

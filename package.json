@@ -12,6 +12,7 @@
     "axios": "^0.21.1",
     "koa": "^2.13.1",
     "koa-bodyparser": "^4.3.0",
+    "koa-mount": "^4.0.0",
     "koa-router": "^10.0.0",
     "koa-static": "^5.0.0",
     "mysql": "^2.18.1",
@@ -20,6 +21,7 @@
   "devDependencies": {
     "@types/koa": "^2.13.1",
     "@types/koa-bodyparser": "^4.3.0",
+    "@types/koa-mount": "^4.0.0",
     "@types/koa-router": "^7.4.1",
     "@types/koa-static": "^4.0.1",
     "@types/koa__cors": "^3.0.2",
