@@ -1,3 +1,3 @@
 # insmemo
 
-知识星球 + flomo
+flomo + 知识星球
