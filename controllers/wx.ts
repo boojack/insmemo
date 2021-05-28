@@ -36,7 +36,7 @@ export namespace WxController {
 
       const timestamp = Math.ceil(Date.now() / 1000);
       const ticket = data.ticket;
-      const rawString = `jsapi_ticket=${ticket}&noncestr=Wm3WZYTPz0wzccnW&timestamp=${timestamp}&url=https://insmemo.justsven.top`;
+      const rawString = `jsapi_ticket=${ticket}&noncestr=Wm3WZYTPz0wzccnW&timestamp=${timestamp}&url=https://insmemo.justsven.top/`;
 
       signature.value = utils.getInsecureSHA1ofStr(rawString);
       signature.timestamp = timestamp;
