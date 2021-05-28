@@ -52,7 +52,7 @@ export namespace WxController {
     }
 
     const timestamp = Math.ceil(Date.now() / 1000);
-    const rawString = `jsapi_ticket=${jsapiTicket.value}&noncestr=insmemo&timestamp=${timestamp}&url=http://mp.weixin.qq.com?params=value`;
+    const rawString = `jsapi_ticket=${jsapiTicket.value}&noncestr=insmemo&timestamp=${timestamp}&url=https://insmemo.justsven.top/`;
 
     ctx.body = {
       succeed: true,
