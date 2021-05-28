@@ -88,11 +88,11 @@ export namespace MemoModel {
     }
   }
 
-  export async function updateMemoContent(memoId: string, content: string): Promise<boolean> {
-    const sql = `UPDATE memos SET content=?, updated_at=? WHERE id=?`;
+  export async function updateMemoContent(memoId: string, content: string, uponMemoId: string): Promise<boolean> {
+    const sql = `UPDATE memos SET content=?, upon_memo_id=?, updated_at=? WHERE id=?`;
     const nowTimeStr = utils.getTimeString();
 
-    await DB.query(sql, [content, nowTimeStr, memoId]);
+    await DB.query(sql, [content, uponMemoId, nowTimeStr, memoId]);
     return true;
   }
 

@@ -104,6 +104,13 @@ export namespace TagModel {
     }
   }
 
+  export async function deleteMemoTag(memoId: string, tagId: string): Promise<boolean> {
+    const sql = `DELETE FROM memo_tag WHERE memo_id=? AND tag_id=?`;
+
+    await DB.query(sql, [memoId, tagId]);
+    return true;
+  }
+
   export async function deleteMemoTagByMemoId(memoId: string): Promise<boolean> {
     const sql = `DELETE FROM memo_tag WHERE memo_id=?`;
 

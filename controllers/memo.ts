@@ -98,20 +98,31 @@ export namespace MemoController {
   }
 
   export async function updateMemo(ctx: Context) {
-    const { memoId, content } = ctx.request.body;
+    const { memoId, content, uponMemoId } = ctx.request.body;
 
-    if (!utils.isString(memoId) || !utils.isString(content)) {
+    if (!utils.isString(memoId) || !utils.isString(content) || !utils.isString(uponMemoId)) {
       throw new Error("30001");
     }
 
-    const result = await MemoModel.updateMemoContent(memoId, content);
+    const result = await MemoModel.updateMemoContent(memoId, content, uponMemoId);
     if (!result) {
       throw new Error("50002");
+    }
+
+    const data: IterObject = {
+      id: memoId,
+      content,
+      uponMemoId,
+    };
+
+    if (uponMemoId) {
+      data["uponMemo"] = await MemoModel.getMemoById(uponMemoId);
     }
 
     ctx.body = {
       succeed: true,
       message: "update memo content succeed",
+      data,
     };
   }
 }

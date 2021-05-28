@@ -57,6 +57,22 @@ export namespace TagController {
     };
   }
 
+  // remove memo with tag
+  export async function deleteMemoTagLink(ctx: Context) {
+    const { memoId, tagId } = ctx.request.body;
+
+    if (!utils.isString(memoId) || !utils.isString(tagId)) {
+      throw new Error("30001");
+    }
+
+    await TagModel.deleteMemoTag(memoId, tagId);
+
+    ctx.body = {
+      succeed: true,
+      data: true,
+    };
+  }
+
   // get memo tags
   export async function getTagsByMemoId(ctx: Context) {
     const { id: memoId } = ctx.query;
