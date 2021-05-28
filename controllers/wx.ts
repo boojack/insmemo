@@ -4,12 +4,9 @@ import { wxConfig } from "../helpers/config";
 import { utils } from "../helpers/utils";
 
 const token = "insmemo0justsven0top";
-const accessToken = {
-  value: "",
-  expiresAt: Date.now(),
-};
 const jsapiTicket = {
   value: "",
+  timestamp: 0,
   expiresAt: Date.now(),
 };
 
@@ -31,32 +28,29 @@ export namespace WxController {
   }
 
   export async function getSignatures(ctx: Context) {
-    if (accessToken.value === "" || accessToken.expiresAt <= Date.now()) {
-      const { data } = await axios.get(
+    if (jsapiTicket.value === "" || jsapiTicket.expiresAt <= Date.now()) {
+      const { data: token } = await axios.get(
         `https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=${wxConfig.appID}&secret=${wxConfig.secret}`
       );
 
-      if (data.access_token) {
-        accessToken.value = data.access_token;
-        accessToken.expiresAt = Date.now() + 7200 * 1000;
-      }
-    }
+      console.log(token, token.access_token);
+      const { data } = await axios.get(`https://api.weixin.qq.com/cgi-bin/ticket/getticket?access_token=${token.access_token}&type=jsapi`);
 
-    if (jsapiTicket.value === "" || jsapiTicket.expiresAt <= Date.now()) {
-      const { data } = await axios.get(`https://api.weixin.qq.com/cgi-bin/ticket/getticket?access_token=${accessToken.value}&type=jsapi`);
+      console.log(data);
 
+      const timestamp = Math.ceil(Date.now() / 1000);
       if (data.ticket) {
         jsapiTicket.value = data.ticket;
+        jsapiTicket.timestamp = timestamp;
         jsapiTicket.expiresAt = Date.now() + 7200 * 1000;
       }
     }
 
-    const timestamp = Math.ceil(Date.now() / 1000);
-    const rawString = `jsapi_ticket=${jsapiTicket.value}&noncestr=insmemo&timestamp=${timestamp}&url=https://insmemo.justsven.top/`;
+    const rawString = `jsapi_ticket=${jsapiTicket.value}&noncestr=insmemo&timestamp=${jsapiTicket.timestamp}&url=https://insmemo.justsven.top/`;
 
     ctx.body = {
       succeed: true,
-      timestamp: timestamp,
+      timestamp: jsapiTicket.timestamp,
       signature: utils.getInsecureSHA1ofStr(rawString),
     };
   }
