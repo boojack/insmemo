@@ -6,3 +6,4 @@ export const wxRouter = new Router({
 });
 
 wxRouter.get("/", WxController.validate);
+wxRouter.get("/signs", WxController.getSignatures);
