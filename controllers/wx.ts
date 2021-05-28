@@ -46,7 +46,7 @@ export namespace WxController {
       }
     }
 
-    const rawString = `jsapi_ticket=${jsapiTicket.value}&noncestr=insmemo&timestamp=${jsapiTicket.timestamp}&url=https://insmemo.justsven.top/`;
+    const rawString = `jsapi_ticket=${jsapiTicket.value}&noncestr=insmemo&timestamp=${jsapiTicket.timestamp}&url=https://insmemo.justsven.top/?`;
 
     ctx.body = {
       succeed: true,
