@@ -95,9 +95,30 @@ export namespace TagController {
 
     const tags = await TagModel.getTagsByUserId(userId);
 
+    for (const t of tags) {
+      const amount = await TagModel.getTagLinkCount(t.id);
+      (t as IterObject)["amount"] = amount;
+    }
+
     ctx.body = {
       succeed: true,
       data: tags,
+    };
+  }
+
+  // get my tags
+  export async function getTagLinkCount(ctx: Context) {
+    const { tagId } = ctx.query;
+
+    if (!utils.isString(tagId)) {
+      throw new Error("30001");
+    }
+
+    const count: number = await TagModel.getTagLinkCount(tagId as string);
+
+    ctx.body = {
+      succeed: true,
+      data: count,
     };
   }
 
