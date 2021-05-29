@@ -49,6 +49,7 @@ export namespace TagController {
       throw new Error("30001");
     }
 
+    await TagModel.deleteMemoTag(memoId, tagId);
     const memoTag = await TagModel.createMemoTag(memoId, tagId);
 
     ctx.body = {
