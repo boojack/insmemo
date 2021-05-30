@@ -8,6 +8,6 @@ export const userRouter = new Router({
 
 userRouter.get("/me", validSigninCookie, UserController.getMyUserInfo);
 userRouter.get("/amount", validSigninCookie, UserController.getDataAmount);
-userRouter.post("/signup", UserController.signup);
+// userRouter.post("/signup", UserController.signup);
 userRouter.post("/signin", UserController.signin);
 userRouter.post("/signout", UserController.signout);
