@@ -109,6 +109,21 @@ export namespace MemoModel {
     await DB.query(sql, [memoId]);
     return true;
   }
+
+  export async function getMemosStatByUserId(userId: string): Promise<{ timetamp: string; count: number }[]> {
+    const sql = `SELECT created_at as timestamp, COUNT(*) as amount
+    FROM memos
+    WHERE user_id=?
+    GROUP BY CONVERT(created_at, DATE)
+    ORDER BY created_at;`;
+
+    const data = await DB.query<{ timetamp: string; count: number }[]>(sql, [userId]);
+    if (Array.isArray(data)) {
+      return data;
+    } else {
+      return Promise.reject("Error in database.");
+    }
+  }
 }
 
 // const createSql = `

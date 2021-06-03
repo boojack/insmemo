@@ -125,4 +125,15 @@ export namespace MemoController {
       data,
     };
   }
+
+  export async function getMemoStat(ctx: Context) {
+    const userId = ctx.cookies.get("user_id") as string;
+
+    const data = await MemoModel.getMemosStatByUserId(userId);
+
+    ctx.body = {
+      succeed: true,
+      data,
+    };
+  }
 }
