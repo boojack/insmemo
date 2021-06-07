@@ -96,11 +96,6 @@ export namespace TagController {
 
     const tags = await TagModel.getTagsByUserId(userId);
 
-    for (const t of tags) {
-      const amount = await TagModel.getTagLinkCount(t.id);
-      (t as IterObject)["amount"] = amount;
-    }
-
     ctx.body = {
       succeed: true,
       data: tags,

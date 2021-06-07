@@ -72,7 +72,7 @@ export namespace TagModel {
   }
 
   export async function getTagsByUserId(userId: string): Promise<TagType[]> {
-    const sql = `SELECT * FROM tags WHERE user_id=?`;
+    const sql = `SELECT tags.id, tags.text, tags.level, tags.created_at, COUNT(*) as amount FROM tags, memo_tag WHERE user_id=? AND tags.id = memo_tag.tag_id GROUP BY tags.id`;
 
     const data = await DB.query(sql, [userId]);
     if (Array.isArray(data)) {
