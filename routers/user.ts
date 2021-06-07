@@ -11,3 +11,5 @@ userRouter.get("/amount", validSigninCookie, UserController.getDataAmount);
 // userRouter.post("/signup", UserController.signup);
 userRouter.post("/signin", UserController.signin);
 userRouter.post("/signout", UserController.signout);
+userRouter.get("/checkusername", UserController.checkUsernameUsable);
+userRouter.post("/update", UserController.update);

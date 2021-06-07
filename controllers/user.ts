@@ -97,4 +97,31 @@ export namespace UserController {
       },
     };
   }
+
+  export async function checkUsernameUsable(ctx: Context) {
+    const { username } = ctx.query;
+
+    if (!username) {
+      throw new Error("30001");
+    }
+
+    const usernameUsable = await UserModel.checkUsernameUsable(username as string);
+
+    ctx.body = {
+      succeed: true,
+      data: usernameUsable,
+    };
+  }
+
+  export async function update(ctx: Context) {
+    const userId = ctx.cookies.get("user_id") as string;
+    const { username, password } = ctx.request.body;
+
+    await UserModel.updateUser(userId, username ?? "", password ?? "");
+
+    ctx.body = {
+      succeed: true,
+      message: "update succeed",
+    };
+  }
 }

@@ -30,6 +30,17 @@ export namespace UserModel {
     return user;
   }
 
+  export async function updateUser(id: string, username: string, password: string): Promise<boolean> {
+    const nowTimeStr = utils.getTimeString();
+
+    const sql = `UPDATE users SET ${username ? "username='" + username + "' ," : ""} ${
+      password ? "password='" + password + "' ," : ""
+    } updated_at='${nowTimeStr}' WHERE id=?`;
+
+    await DB.query(sql, [id]);
+    return true;
+  }
+
   export async function getUserInfoById(userId: string): Promise<UserType> {
     const sql = "SELECT * FROM users WHERE id=?";
 
