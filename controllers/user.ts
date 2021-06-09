@@ -124,4 +124,20 @@ export namespace UserController {
       message: "update succeed",
     };
   }
+
+  export async function checkPassword(ctx: Context) {
+    const userId = ctx.cookies.get("user_id") as string;
+    const { password } = ctx.request.body;
+
+    if (!password) {
+      throw new Error("30001");
+    }
+
+    const isRight = await UserModel.validPassword(userId, password as string);
+
+    ctx.body = {
+      succeed: true,
+      data: isRight,
+    };
+  }
 }

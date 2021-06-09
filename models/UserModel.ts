@@ -75,6 +75,18 @@ export namespace UserModel {
       return Promise.reject("Error in database.");
     }
   }
+
+  export async function validPassword(userId: string, password: string): Promise<boolean> {
+    const sql = "SELECT * FROM users WHERE id=? AND password=?";
+
+    const data = await DB.query(sql, [userId, password]);
+
+    if (Array.isArray(data) && data.length > 0) {
+      return true;
+    } else {
+      return false;
+    }
+  }
 }
 
 // const createSql = `
