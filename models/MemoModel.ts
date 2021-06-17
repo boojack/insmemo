@@ -5,20 +5,18 @@ interface MemoType {
   id: string;
   content: string;
   userId: string;
-  uponMemoId?: string;
   createdAt: string;
   updatedAt: string;
 }
 
 export namespace MemoModel {
-  export async function createMemo(userId: string, content: string, uponMemoId?: string): Promise<MemoType> {
-    const sql = `INSERT INTO memos (id, content, user_id, upon_memo_id, created_at, updated_at) VALUES (?)`;
+  export async function createMemo(userId: string, content: string): Promise<MemoType> {
+    const sql = `INSERT INTO memos (id, content, user_id, created_at, updated_at) VALUES (?)`;
     const nowTimeStr = utils.getTimeString();
     const memo: MemoType = {
       id: utils.genUUID(),
       content,
       userId,
-      uponMemoId,
       createdAt: nowTimeStr,
       updatedAt: nowTimeStr,
     };
@@ -88,23 +86,16 @@ export namespace MemoModel {
     }
   }
 
-  export async function updateMemoContent(memoId: string, content: string, uponMemoId: string): Promise<boolean> {
-    const sql = `UPDATE memos SET content=?, upon_memo_id=?, updated_at=? WHERE id=?`;
+  export async function updateMemoContent(memoId: string, content: string): Promise<boolean> {
+    const sql = `UPDATE memos SET content=?, updated_at=? WHERE id=?`;
     const nowTimeStr = utils.getTimeString();
 
-    await DB.query(sql, [content, uponMemoId, nowTimeStr, memoId]);
+    await DB.query(sql, [content, nowTimeStr, memoId]);
     return true;
   }
 
   export async function deleteMemoByID(memoId: string): Promise<boolean> {
     const sql = `DELETE FROM memos WHERE id=?`;
-
-    await DB.query(sql, [memoId]);
-    return true;
-  }
-
-  export async function removeUponMemoRecordByID(memoId: string): Promise<boolean> {
-    const sql = `UPDATE memos SET upon_memo_id="" WHERE upon_memo_id=?`;
 
     await DB.query(sql, [memoId]);
     return true;
@@ -131,7 +122,6 @@ export namespace MemoModel {
 //   id VARCHAR(36) NOT NULL,
 //   content TEXT NOT NULL,
 //   user_id VARCHAR(36) NOT NULL,
-//   upon_memo_id VARCHAR(36),
 //   created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
 //   updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
 //   PRIMARY KEY(id),

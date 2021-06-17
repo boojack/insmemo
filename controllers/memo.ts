@@ -16,10 +16,6 @@ export namespace MemoController {
 
     for (const m of memos) {
       m.tags = await TagModel.getMemoTags(m.id);
-
-      if (m.uponMemoId) {
-        m.uponMemo = await MemoModel.getMemoById(m.uponMemoId);
-      }
     }
 
     ctx.body = {
@@ -59,13 +55,13 @@ export namespace MemoController {
   // create memo
   export async function createMemo(ctx: Context) {
     const userId = ctx.cookies.get("user_id") as string;
-    const { content, uponMemoId } = ctx.request.body;
+    const { content } = ctx.request.body;
 
     if (!utils.isString(content)) {
       throw new Error("30001");
     }
 
-    const memo = await MemoModel.createMemo(userId, content, uponMemoId);
+    const memo = await MemoModel.createMemo(userId, content);
 
     ctx.body = {
       succeed: true,
@@ -83,8 +79,6 @@ export namespace MemoController {
     try {
       // 删除 memo_tag
       await TagModel.deleteMemoTagByMemoId(memoId);
-      // 删除相关联的 uponmemo_id
-      await MemoModel.removeUponMemoRecordByID(memoId);
       // 删除此 memo
       await MemoModel.deleteMemoByID(memoId);
     } catch (error) {
@@ -98,13 +92,13 @@ export namespace MemoController {
   }
 
   export async function updateMemo(ctx: Context) {
-    const { memoId, content, uponMemoId } = ctx.request.body;
+    const { memoId, content } = ctx.request.body;
 
-    if (!utils.isString(memoId) || !utils.isString(content) || !utils.isString(uponMemoId)) {
+    if (!utils.isString(memoId) || !utils.isString(content)) {
       throw new Error("30001");
     }
 
-    const result = await MemoModel.updateMemoContent(memoId, content, uponMemoId);
+    const result = await MemoModel.updateMemoContent(memoId, content);
     if (!result) {
       throw new Error("50002");
     }
@@ -112,12 +106,7 @@ export namespace MemoController {
     const data: IterObject = {
       id: memoId,
       content,
-      uponMemoId,
     };
-
-    if (uponMemoId) {
-      data["uponMemo"] = await MemoModel.getMemoById(uponMemoId);
-    }
 
     ctx.body = {
       succeed: true,
