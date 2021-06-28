@@ -1,5 +1,5 @@
-import { v4 as uuidv4 } from "uuid";
 import crypto from "crypto";
+import { generate } from "short-uuid";
 
 export namespace utils {
   /**
@@ -7,7 +7,7 @@ export namespace utils {
    * @returns uuid
    */
   export function genUUID(): string {
-    return uuidv4();
+    return generate();
   }
 
   export function getNowTimeStamp(): TimeStamp {

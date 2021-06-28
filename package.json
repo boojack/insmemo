@@ -16,7 +16,7 @@
     "koa-router": "^10.0.0",
     "koa-static": "^5.0.0",
     "mysql": "^2.18.1",
-    "uuid": "^8.3.2"
+    "short-uuid": "^4.2.0"
   },
   "devDependencies": {
     "@types/koa": "^2.13.1",
