@@ -9,7 +9,6 @@
   },
   "dependencies": {
     "@koa/cors": "^3.1.0",
-    "axios": "^0.21.1",
     "koa": "^2.13.1",
     "koa-bodyparser": "^4.3.0",
     "koa-mount": "^4.0.0",
