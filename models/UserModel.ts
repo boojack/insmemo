@@ -16,7 +16,7 @@ export namespace UserModel {
    * @param username
    * @param password
    */
-  export async function createUser(username: string, password: string): Promise<UserType> {
+  export async function createUser(username: string, password: string, githubId: number | undefined = undefined): Promise<UserType> {
     const nowTimeStr = utils.getTimeString();
     const user: UserType = {
       id: utils.genUUID(),
@@ -24,8 +24,9 @@ export namespace UserModel {
       password,
       createdAt: nowTimeStr,
       updatedAt: nowTimeStr,
+      githubId,
     };
-    const sql = "INSERT INTO users (id, username, password, created_at, updated_at) VALUES (?)";
+    const sql = "INSERT INTO users (id, username, password, created_at, updated_at, github_id) VALUES (?)";
 
     await DB.query(sql, [Object.values(user)]);
     return user;

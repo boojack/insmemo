@@ -44,6 +44,6 @@ export namespace GithubController {
       maxAge: 1000 * 3600 * 24 * 365,
     });
 
-    ctx.redirect("/");
+    ctx.redirect("https://insmemo.justsven.top/");
   }
 }
