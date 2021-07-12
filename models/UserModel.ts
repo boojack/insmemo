@@ -7,6 +7,7 @@ interface UserType {
   password: string;
   createdAt: string;
   updatedAt: string;
+  githubId?: number;
 }
 
 export namespace UserModel {
@@ -87,6 +88,21 @@ export namespace UserModel {
       return false;
     }
   }
+
+  export async function getUserByGhId(ghId: number): Promise<UserType | null> {
+    const sql = "SELECT * FROM users WHERE github_id=?";
+
+    const data = await DB.query<UserType[]>(sql, [ghId]);
+    if (Array.isArray(data)) {
+      if (data.length > 0) {
+        return data[0];
+      } else {
+        return null;
+      }
+    } else {
+      return Promise.reject("Error in database.");
+    }
+  }
 }
 
 // const createSql = `
@@ -96,6 +112,7 @@ export namespace UserModel {
 //   password VARCHAR(32) NOT NULL,
 //   created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
 //   updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+//   github_id INT,
 //   PRIMARY KEY(id)
 // )
 // `;
