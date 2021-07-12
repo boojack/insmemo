@@ -34,7 +34,7 @@ export namespace GithubController {
     let user = await UserModel.getUserByGhId(ghUser.id);
     if (!user) {
       if (user === null) {
-        user = await UserModel.createUser(ghUser.name, ghUser.name);
+        user = await UserModel.createUser(ghUser.name, ghUser.name, ghUser.id);
       } else {
         throw new Error("50001");
       }
