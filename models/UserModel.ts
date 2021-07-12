@@ -7,7 +7,7 @@ interface UserType {
   password: string;
   createdAt: string;
   updatedAt: string;
-  githubId?: number;
+  githubName: string;
 }
 
 export namespace UserModel {
@@ -16,7 +16,7 @@ export namespace UserModel {
    * @param username
    * @param password
    */
-  export async function createUser(username: string, password: string, githubId: number | undefined = undefined): Promise<UserType> {
+  export async function createUser(username: string, password: string, githubName: string = ""): Promise<UserType> {
     const nowTimeStr = utils.getTimeString();
     const user: UserType = {
       id: utils.genUUID(),
@@ -24,9 +24,9 @@ export namespace UserModel {
       password,
       createdAt: nowTimeStr,
       updatedAt: nowTimeStr,
-      githubId,
+      githubName,
     };
-    const sql = "INSERT INTO users (id, username, password, created_at, updated_at, github_id) VALUES (?)";
+    const sql = "INSERT INTO users (id, username, password, created_at, updated_at, github_name) VALUES (?)";
 
     await DB.query(sql, [Object.values(user)]);
     return user;
@@ -90,10 +90,10 @@ export namespace UserModel {
     }
   }
 
-  export async function getUserByGhId(ghId: number): Promise<UserType | null> {
-    const sql = "SELECT * FROM users WHERE github_id=?";
+  export async function getUserByGhName(gbName: string): Promise<UserType | null> {
+    const sql = "SELECT * FROM users WHERE github_name=?";
 
-    const data = await DB.query<UserType[]>(sql, [ghId]);
+    const data = await DB.query<UserType[]>(sql, [gbName]);
     if (Array.isArray(data)) {
       if (data.length > 0) {
         return data[0];
@@ -113,7 +113,7 @@ export namespace UserModel {
 //   password VARCHAR(32) NOT NULL,
 //   created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
 //   updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-//   github_id INT,
+//   github_name VARCHAR(32),
 //   PRIMARY KEY(id)
 // )
 // `;

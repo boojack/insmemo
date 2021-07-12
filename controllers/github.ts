@@ -6,6 +6,7 @@ import querystring from "querystring";
 
 interface GithubUserInfo {
   id: number;
+  login: string;
   name: string;
 }
 
@@ -31,10 +32,10 @@ export namespace GithubController {
       throw new Error("20010");
     }
 
-    let user = await UserModel.getUserByGhId(ghUser.id);
+    let user = await UserModel.getUserByGhName(ghUser.login);
     if (!user) {
       if (user === null) {
-        user = await UserModel.createUser(ghUser.name, ghUser.name, ghUser.id);
+        user = await UserModel.createUser(ghUser.name, ghUser.name, ghUser.login);
       } else {
         throw new Error("50001");
       }
