@@ -32,14 +32,13 @@ export namespace GithubController {
       throw new Error("20010");
     }
 
-    const githubNameUsable = await UserModel.checkGithubnameUsable(ghUser.login);
-    if (!githubNameUsable) {
-      throw new Error("20011");
-    }
-
     // 如果已经登录，则更新绑定信息
     const userId = ctx.cookies.get("user_id") as string;
     if (userId) {
+      const githubNameUsable = await UserModel.checkGithubnameUsable(ghUser.login);
+      if (!githubNameUsable) {
+        throw new Error("20011");
+      }
       await UserModel.updateGithubName(userId, ghUser.login);
     }
 
