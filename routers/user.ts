@@ -13,4 +13,5 @@ userRouter.post("/signin", UserController.signin);
 userRouter.post("/signout", UserController.signout);
 userRouter.get("/checkusername", UserController.checkUsernameUsable);
 userRouter.post("/update", UserController.update);
+userRouter.post("/updategh", UserController.updateGithubName);
 userRouter.post("/checkpassword", UserController.checkPassword);

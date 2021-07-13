@@ -43,6 +43,13 @@ export namespace UserModel {
     return true;
   }
 
+  export async function updateGithubName(id: string, githubName: string): Promise<boolean> {
+    const sql = `UPDATE users SET github_name=? WHERE id=?`;
+
+    await DB.query(sql, [githubName, id]);
+    return true;
+  }
+
   export async function getUserInfoById(userId: string): Promise<UserType> {
     const sql = "SELECT * FROM users WHERE id=?";
 
@@ -58,6 +65,17 @@ export namespace UserModel {
     const sql = "SELECT * FROM users WHERE username=?";
 
     const data = await DB.query(sql, [username]);
+
+    if (Array.isArray(data) && data.length > 0) {
+      return false;
+    } else {
+      return true;
+    }
+  }
+
+  export async function checkGithubnameUsable(githubName: string): Promise<boolean> {
+    const sql = "SELECT * FROM users WHERE github_name=?";
+    const data = await DB.query(sql, [githubName]);
 
     if (Array.isArray(data) && data.length > 0) {
       return false;

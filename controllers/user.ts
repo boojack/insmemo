@@ -125,6 +125,18 @@ export namespace UserController {
     };
   }
 
+  export async function updateGithubName(ctx: Context) {
+    const userId = ctx.cookies.get("user_id") as string;
+    const { githubName } = ctx.request.body;
+
+    await UserModel.updateGithubName(userId, githubName);
+
+    ctx.body = {
+      succeed: true,
+      message: "update succeed",
+    };
+  }
+
   export async function checkPassword(ctx: Context) {
     const userId = ctx.cookies.get("user_id") as string;
     const { password } = ctx.request.body;

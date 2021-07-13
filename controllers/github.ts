@@ -32,10 +32,28 @@ export namespace GithubController {
       throw new Error("20010");
     }
 
+    const githubNameUsable = await UserModel.checkGithubnameUsable(ghUser.login);
+    if (!githubNameUsable) {
+      throw new Error("20011");
+    }
+
+    // 如果已经登录，则更新绑定信息
+    const userId = ctx.cookies.get("user_id") as string;
+    if (userId) {
+      await UserModel.updateGithubName(userId, ghUser.login);
+    }
+
     let user = await UserModel.getUserByGhName(ghUser.login);
     if (!user) {
       if (user === null) {
-        user = await UserModel.createUser(ghUser.name, ghUser.name, ghUser.login);
+        // 防止用户名重复
+        let username = ghUser.name;
+        let usernameUsable = await UserModel.checkUsernameUsable(username);
+        while (!usernameUsable) {
+          username += "v";
+          usernameUsable = await UserModel.checkUsernameUsable(username);
+        }
+        user = await UserModel.createUser(username, username, ghUser.login);
       } else {
         throw new Error("50001");
       }
