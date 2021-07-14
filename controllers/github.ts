@@ -14,20 +14,20 @@ export namespace GithubController {
   export async function oauth(ctx: Context) {
     const { code } = ctx.query;
 
-    const atRes = await axios.get(
+    const tokenRes = await axios.get(
       `https://github.com/login/oauth/access_token?client_id=${githubOAuthConfig.clientId}&client_secret=${githubOAuthConfig.clientSecret}&code=${code}`
     );
-    const accessToken = querystring.parse(atRes.data).access_token as string;
+    const accessToken = querystring.parse(tokenRes.data).access_token as string;
     if (!accessToken) {
       throw new Error("20010");
     }
 
-    const userRes = await axios.get(`https://api.github.com/user`, {
+    const ghUserRes = await axios.get(`https://api.github.com/user`, {
       headers: {
         Authorization: "token " + accessToken,
       },
     });
-    const ghUser = userRes.data as GithubUserInfo;
+    const ghUser = ghUserRes.data as GithubUserInfo;
     if (!ghUser) {
       throw new Error("20010");
     }
@@ -44,6 +44,7 @@ export namespace GithubController {
 
     let user = await UserModel.getUserByGhName(ghUser.login);
     if (!user) {
+      // 创建新用户
       if (user === null) {
         // 防止用户名重复
         let username = ghUser.name;
@@ -53,15 +54,12 @@ export namespace GithubController {
           usernameUsable = await UserModel.checkUsernameUsable(username);
         }
         user = await UserModel.createUser(username, username, ghUser.login);
-      } else {
-        throw new Error("50001");
       }
     }
 
     ctx.cookies.set("user_id", user.id, {
       maxAge: 1000 * 3600 * 24 * 365,
     });
-
     ctx.redirect("https://insmemo.justsven.top/");
   }
 }
