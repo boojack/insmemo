@@ -60,6 +60,6 @@ export namespace GithubController {
     ctx.cookies.set("user_id", user.id, {
       maxAge: 1000 * 3600 * 24 * 365,
     });
-    ctx.redirect("https://insmemo.justsven.top/");
+    ctx.redirect("https://memos.justsven.top/");
   }
 }
