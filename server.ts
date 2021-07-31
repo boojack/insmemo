@@ -14,6 +14,13 @@ const app = new Koa();
 // 错误处理中间件
 app.use(errorHandler);
 
+// 跨域
+app.use(
+  cors({
+    credentials: true,
+  })
+);
+
 // 托管静态文件
 app.use(
   Mount(
@@ -25,25 +32,6 @@ app.use(
     })
   )
 );
-
-// 托管静态文件
-app.use(
-  Mount(
-    "/mp",
-    Serve("./statics/mp/", {
-      defer: true,
-    })
-  )
-);
-
-// 跨域（仅供 dev 使用）
-if (process.env.NODE_ENV === "dev") {
-  app.use(
-    cors({
-      credentials: true,
-    })
-  );
-}
 
 app.use(bodyParser());
 
