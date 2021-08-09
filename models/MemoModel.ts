@@ -37,7 +37,7 @@ export namespace MemoModel {
   }
 
   export async function getMemosByUserId(userId: string, offset: number, amount: number = 20): Promise<MemoType[]> {
-    const sql = `SELECT * FROM memos WHERE user_id=? ORDER BY created_at DESC ${amount === -1 ? "" : "LIMIT " + amount} OFFSET ${offset}`;
+    const sql = `SELECT * FROM memos WHERE user_id=? ORDER BY created_at DESC ${amount > 0 ? "LIMIT " + amount : ""} OFFSET ${offset}`;
 
     const data = await DB.query<MemoType[]>(sql, [userId]);
 
