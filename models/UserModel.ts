@@ -84,13 +84,17 @@ export namespace UserModel {
     }
   }
 
-  export async function validSigninInfo(username: string, password: string): Promise<UserType> {
+  export async function validSigninInfo(username: string, password: string): Promise<UserType | null> {
     const sql = "SELECT * FROM users WHERE username=? AND password=?";
 
     const data = await DB.query(sql, [username, password]);
 
     if (Array.isArray(data)) {
-      return data[0];
+      if (data.length > 0) {
+        return data[0];
+      } else {
+        return null;
+      }
     } else {
       return Promise.reject("Error in database.");
     }
@@ -112,6 +116,7 @@ export namespace UserModel {
     const sql = "SELECT * FROM users WHERE github_name=?";
 
     const data = await DB.query<UserType[]>(sql, [gbName]);
+
     if (Array.isArray(data)) {
       if (data.length > 0) {
         return data[0];

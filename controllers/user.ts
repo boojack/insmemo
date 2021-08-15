@@ -145,11 +145,11 @@ export namespace UserController {
       throw new Error("30001");
     }
 
-    const isRight = await UserModel.validPassword(userId, password as string);
+    const isValid = await UserModel.validPassword(userId, password as string);
 
     ctx.body = {
       succeed: true,
-      data: isRight,
+      data: isValid,
     };
   }
 }

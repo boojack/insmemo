@@ -102,22 +102,6 @@ export namespace TagController {
     };
   }
 
-  // get my tags
-  export async function getTagLinkCount(ctx: Context) {
-    const { tagId } = ctx.query;
-
-    if (!utils.isString(tagId)) {
-      throw new Error("30001");
-    }
-
-    const count: number = await TagModel.getTagLinkCount(tagId as string);
-
-    ctx.body = {
-      succeed: true,
-      data: count,
-    };
-  }
-
   // delete tag
   export async function deleteTagById(ctx: Context) {
     const { tagId } = ctx.request.body;

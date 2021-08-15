@@ -48,13 +48,7 @@ export namespace MemoModel {
     }
   }
 
-  export async function getMemosWithDuration(
-    userId: string,
-    from: Date,
-    to: Date,
-    offset: number = 0,
-    amount: number = 20
-  ): Promise<MemoType[]> {
+  export async function getMemosWithDuration(userId: string, from: Date, to: Date): Promise<MemoType[]> {
     const sql = `
       SELECT * FROM memos 
       WHERE 
@@ -63,8 +57,6 @@ export namespace MemoModel {
         ${Boolean(to) ? "AND created_at < '" + utils.getTimeString(to) + "'" : ""} 
       ORDER BY created_at 
       DESC 
-      LIMIT ${amount} 
-      OFFSET ${offset}
     `;
 
     const data = await DB.query<MemoType[]>(sql, [userId]);
@@ -75,12 +67,16 @@ export namespace MemoModel {
     }
   }
 
-  export async function getMemoById(id: string): Promise<MemoType> {
+  export async function getMemoById(id: string): Promise<MemoType | null> {
     const sql = `SELECT * FROM memos WHERE id=?`;
 
     const data = await DB.query<MemoType[]>(sql, [id]);
-    if (Array.isArray(data) && data.length > 0) {
-      return data[0];
+    if (Array.isArray(data)) {
+      if (data.length > 0) {
+        return data[0];
+      } else {
+        return null;
+      }
     } else {
       return Promise.reject("Error in database.");
     }

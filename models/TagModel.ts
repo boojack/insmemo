@@ -82,17 +82,6 @@ export namespace TagModel {
     }
   }
 
-  export async function getTagLinkCount(tagId: string): Promise<number> {
-    const sql = `SELECT COUNT(*) as count FROM memo_tag WHERE tag_id=?`;
-
-    const data = await DB.query(sql, [tagId]);
-    if (Array.isArray(data) && data.length > 0) {
-      return data[0].count as number;
-    } else {
-      return Promise.reject("Error in database.");
-    }
-  }
-
   export async function getMemoTags(memoId: string): Promise<TagType[]> {
     const sql = `SELECT t.id id, t.text text FROM tags t, memo_tag mt WHERE mt.memo_id=? AND t.id=mt.tag_id`;
 
@@ -104,12 +93,16 @@ export namespace TagModel {
     }
   }
 
-  export async function checkExist(userId: string, text: string): Promise<TagType> {
+  export async function checkExist(userId: string, text: string): Promise<TagType | null> {
     const sql = `SELECT * FROM tags WHERE user_id=? AND text=?`;
 
     const data = await DB.query<TagType[]>(sql, [userId, text]);
     if (Array.isArray(data)) {
-      return data[0];
+      if (data.length > 0) {
+        return data[0];
+      } else {
+        return null;
+      }
     } else {
       return Promise.reject("Error in database.");
     }
