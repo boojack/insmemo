@@ -1,3 +1,4 @@
 [submodule "web"]
 	path = web
 	url = git@github.com:boojack/insmemo-web.git
+	branch = dist
