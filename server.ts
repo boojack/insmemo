@@ -22,7 +22,7 @@ app.use(
 app.use(
   Mount(
     "/",
-    Serve("./web/dist/", {
+    Serve("./web/", {
       maxAge: 1000 * 60 * 60 * 24 * 30,
       defer: true,
     })
