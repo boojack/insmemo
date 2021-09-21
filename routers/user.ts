@@ -1,6 +1,6 @@
 import Router from "koa-router";
 import { UserController } from "../controllers/user";
-import { validSigninCookie } from "../middlewares/jwt";
+import { validSigninCookie } from "../middlewares/authCheck";
 
 export const userRouter = new Router({
   prefix: "/api/user",

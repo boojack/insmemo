@@ -1,6 +1,6 @@
 import Router from "koa-router";
 import { TagController } from "../controllers/tag";
-import { validSigninCookie } from "../middlewares/jwt";
+import { validSigninCookie } from "../middlewares/authCheck";
 
 export const tagRouter = new Router({
   prefix: "/api/tag",

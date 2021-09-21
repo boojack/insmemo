@@ -11,11 +11,6 @@ interface UserType {
 }
 
 export namespace UserModel {
-  /**
-   * create user
-   * @param username
-   * @param password
-   */
   export async function createUser(username: string, password: string, githubName: string = ""): Promise<UserType> {
     const nowTimeStr = utils.getTimeString();
     const user: UserType = {
@@ -128,15 +123,3 @@ export namespace UserModel {
     }
   }
 }
-
-// const createSql = `
-// CREATE TABLE users (
-//   id VARCHAR(36) NOT NULL,
-//   username VARCHAR(32) NOT NULL,
-//   password VARCHAR(32) NOT NULL,
-//   created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-//   updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-//   github_name VARCHAR(32),
-//   PRIMARY KEY(id)
-// )
-// `;

@@ -64,7 +64,7 @@ export namespace TagModel {
     return memoTag;
   }
 
-  export async function increaseTagLevel(tagId: string): Promise<boolean> {
+  export async function polishTagLevel(tagId: string): Promise<boolean> {
     const sql = `UPDATE tags SET level=level+1 WHERE id=?`;
 
     await DB.query(sql, [tagId]);
@@ -136,26 +136,3 @@ export namespace TagModel {
     return true;
   }
 }
-
-// const createSql = `
-// CREATE TABLE tags (
-//   id VARCHAR(36) NOT NULL,
-//   user_id VARCHAR(36) NOT NULL,
-//   text VARCHAR(36) NOT NULL,
-//   level int UNSIGNED NOT NULL DEFAULT 0,
-//   created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-//   PRIMARY KEY(id),
-//   FOREIGN KEY(user_id) REFERENCES users(id)
-// )
-// `;
-
-// const createMemoTagSql = `
-// CREATE TABLE memo_tag (
-//   id VARCHAR(36) NOT NULL,
-//   memo_id VARCHAR(36) NOT NULL,
-//   tag_id VARCHAR(36) NOT NULL,
-//   PRIMARY KEY(id),
-//   FOREIGN KEY(memo_id) REFERENCES memos(id),
-//   FOREIGN KEY(tag_id) REFERENCES tags(id)
-// )
-// `;

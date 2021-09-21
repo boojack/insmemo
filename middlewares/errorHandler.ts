@@ -4,7 +4,7 @@ import { getErrorInfo } from "../helpers/Error";
 export async function errorHandler(ctx: Context, next: Next) {
   try {
     await next();
-  } catch (error) {
+  } catch (error: any) {
     const errorInfo = getErrorInfo(error.message);
 
     ctx.status = errorInfo.statusCode;

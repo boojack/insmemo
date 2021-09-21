@@ -11,22 +11,18 @@ import { githubRouter } from "./routers/github";
 
 const app = new Koa();
 
-// 错误处理中间件
 app.use(errorHandler);
 
-// 跨域
 app.use(
   cors({
     credentials: true,
   })
 );
 
-// 托管静态文件
 app.use(
   Mount(
     "/",
     Serve("./web/dist/", {
-      // 缓存 1 月
       maxAge: 1000 * 60 * 60 * 24 * 30,
       defer: true,
     })

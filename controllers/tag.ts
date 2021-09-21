@@ -16,7 +16,7 @@ export namespace TagController {
     if (!tag) {
       tag = await TagModel.createTag(userId, text);
     } else {
-      await TagModel.increaseTagLevel(tag.id);
+      await TagModel.polishTagLevel(tag.id);
     }
 
     ctx.body = {
@@ -33,7 +33,7 @@ export namespace TagController {
       throw new Error("30001");
     }
 
-    const result = await TagModel.increaseTagLevel(tagId);
+    const result = await TagModel.polishTagLevel(tagId);
 
     ctx.body = {
       succeed: true,

@@ -1,6 +1,6 @@
 import Router from "koa-router";
 import { MemoController } from "../controllers/memo";
-import { validSigninCookie } from "../middlewares/jwt";
+import { validSigninCookie } from "../middlewares/authCheck";
 
 export const memoRouter = new Router({
   prefix: "/api/memo",

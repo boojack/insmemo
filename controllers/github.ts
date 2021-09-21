@@ -13,11 +13,11 @@ interface GithubUserInfo {
 export namespace GithubController {
   export async function oauth(ctx: Context) {
     const { code } = ctx.query;
-
     const tokenRes = await axios.get(
       `https://github.com/login/oauth/access_token?client_id=${githubOAuthConfig.clientId}&client_secret=${githubOAuthConfig.clientSecret}&code=${code}`
     );
     const accessToken = querystring.parse(tokenRes.data).access_token as string;
+
     if (!accessToken) {
       throw new Error("20010");
     }
@@ -28,12 +28,14 @@ export namespace GithubController {
       },
     });
     const ghUser = ghUserRes.data as GithubUserInfo;
+
     if (!ghUser) {
       throw new Error("20010");
     }
 
     // 如果已经登录，则更新绑定信息
     const userId = ctx.cookies.get("user_id") as string;
+
     if (userId) {
       const githubNameUsable = await UserModel.checkGithubnameUsable(ghUser.login);
       if (!githubNameUsable) {
@@ -43,6 +45,7 @@ export namespace GithubController {
     }
 
     let user = await UserModel.getUserByGhName(ghUser.login);
+
     if (!user) {
       // 创建新用户
       if (user === null) {
