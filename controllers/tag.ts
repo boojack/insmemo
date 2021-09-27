@@ -1,5 +1,6 @@
 import { Context } from "koa";
 import { utils } from "../helpers/utils";
+import { MemoModel } from "../models/MemoModel";
 import { TagModel } from "../models/TagModel";
 
 export namespace TagController {
@@ -38,6 +39,30 @@ export namespace TagController {
     ctx.body = {
       succeed: true,
       data: result,
+    };
+  }
+
+  // update tag
+  export async function updateTag(ctx: Context) {
+    const userId = ctx.cookies.get("user_id") as string;
+    const { id, text } = ctx.request.body;
+
+    if (!utils.isString(text)) {
+      throw new Error("30001");
+    }
+
+    const tag = await TagModel.getTagById(id);
+
+    if (!tag) {
+      // do nth
+    } else {
+      await TagModel.updateTagText(id, text);
+      await MemoModel.replaceMemoTagText(userId, tag.text, text);
+    }
+
+    ctx.body = {
+      succeed: true,
+      data: null,
     };
   }
 

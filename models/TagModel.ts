@@ -93,6 +93,28 @@ export namespace TagModel {
     }
   }
 
+  export async function getTagById(id: string): Promise<TagType | null> {
+    const sql = `SELECT * FROM tags WHERE id=?`;
+
+    const data = await DB.query<TagType[]>(sql, [id]);
+    if (Array.isArray(data)) {
+      if (data.length > 0) {
+        return data[0];
+      } else {
+        return null;
+      }
+    } else {
+      return Promise.reject("Error in database.");
+    }
+  }
+
+  export async function updateTagText(id: string, text: string): Promise<boolean> {
+    const sql = `UPDATE tags SET text=? WHERE id=?`;
+
+    await DB.query<TagType[]>(sql, [text, id]);
+    return true;
+  }
+
   export async function checkExist(userId: string, text: string): Promise<TagType | null> {
     const sql = `SELECT * FROM tags WHERE user_id=? AND text=?`;
 

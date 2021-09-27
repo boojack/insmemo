@@ -97,6 +97,12 @@ export namespace MemoModel {
     return true;
   }
 
+  export async function replaceMemoTagText(userId: string, prev: string, curr: string): Promise<boolean> {
+    const sql = `UPDATE memos SET content=REPLACE(content, ?, ?) WHERE user_id=?`;
+    await DB.query(sql, ["# " + prev + " ", "# " + curr + " ", userId]);
+    return true;
+  }
+
   export async function getMemosStatByUserId(userId: string): Promise<{ timetamp: string; count: number }[]> {
     const sql = `SELECT created_at as timestamp, COUNT(*) as amount
     FROM memos
