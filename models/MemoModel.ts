@@ -101,7 +101,7 @@ export namespace MemoModel {
     const sql = `SELECT created_at as timestamp, COUNT(*) as amount
     FROM memos
     WHERE user_id=?
-    GROUP BY CONVERT(created_at, DATE)
+    GROUP BY created_at
     ORDER BY created_at;`;
 
     const data = await DB.query<{ timetamp: string; count: number }[]>(sql, [userId]);
