@@ -12,6 +12,13 @@ export namespace UserController {
     const userId = ctx.cookies.get("user_id") as string;
     const userinfo = await UserModel.getUserInfoById(userId);
 
+    if (!userinfo) {
+      ctx.body = {
+        succeed: false,
+      };
+      return;
+    }
+
     // 数据去敏
     const data = userinfo as IterObject;
     delete data.password;

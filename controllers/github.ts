@@ -46,18 +46,15 @@ export namespace GithubController {
 
     let user = await UserModel.getUserByGhName(ghUser.login);
 
-    if (!user) {
-      // 创建新用户
-      if (user === null) {
-        // 防止用户名重复
-        let username = ghUser.name;
-        let usernameUsable = await UserModel.checkUsernameUsable(username);
-        while (!usernameUsable) {
-          username += "v";
-          usernameUsable = await UserModel.checkUsernameUsable(username);
-        }
-        user = await UserModel.createUser(username, username, ghUser.login);
+    if (user === null) {
+      // 创建新用户，防止用户名重复
+      let username = ghUser.name;
+      let usernameUsable = await UserModel.checkUsernameUsable(username);
+      while (!usernameUsable) {
+        username += "v";
+        usernameUsable = await UserModel.checkUsernameUsable(username);
       }
+      user = await UserModel.createUser(username, username, ghUser.login);
     }
 
     ctx.cookies.set("user_id", user.id, {

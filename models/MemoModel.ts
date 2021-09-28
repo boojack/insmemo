@@ -1,4 +1,4 @@
-import { DB } from "../helpers/DBHelper";
+import DB from "../helpers/DBHelper";
 import { utils } from "../helpers/utils";
 
 interface MemoType {
@@ -11,7 +11,7 @@ interface MemoType {
 
 export namespace MemoModel {
   export async function createMemo(userId: string, content: string): Promise<MemoType> {
-    const sql = `INSERT INTO memos (id, content, user_id, created_at, updated_at) VALUES (?)`;
+    const sql = `INSERT INTO memos (id, content, user_id, created_at, updated_at) VALUES (?, ?, ?, ?, ?)`;
     const nowTimeStr = utils.getTimeString();
     const memo: MemoType = {
       id: utils.genUUID(),
@@ -21,31 +21,26 @@ export namespace MemoModel {
       updatedAt: nowTimeStr,
     };
 
-    await DB.query(sql, [Object.values(memo)]);
+    await DB.run(sql, Object.values(memo));
     return memo;
   }
 
   export async function countMemosByUserId(userId: string): Promise<number> {
     const sql = `SELECT COUNT(*) as count FROM memos WHERE user_id=?`;
 
-    const data = await DB.query(sql, [userId]);
-    if (Array.isArray(data) && data.length > 0) {
-      return data[0].count as number;
+    const data = await DB.get(sql, [userId]);
+    if (data === null) {
+      return 0;
     } else {
-      return Promise.reject("Error in database.");
+      return data.count as number;
     }
   }
 
   export async function getMemosByUserId(userId: string, offset: number, amount: number = 20): Promise<MemoType[]> {
     const sql = `SELECT * FROM memos WHERE user_id=? ORDER BY created_at DESC LIMIT ${amount} OFFSET ${offset}`;
 
-    const data = await DB.query<MemoType[]>(sql, [userId]);
-
-    if (Array.isArray(data)) {
-      return data;
-    } else {
-      return Promise.reject("Error in database.");
-    }
+    const data = await DB.all<MemoType[]>(sql, [userId]);
+    return data;
   }
 
   export async function getMemosWithDuration(userId: string, from: Date, to: Date): Promise<MemoType[]> {
@@ -59,47 +54,35 @@ export namespace MemoModel {
       DESC 
     `;
 
-    const data = await DB.query<MemoType[]>(sql, [userId]);
-    if (Array.isArray(data)) {
-      return data;
-    } else {
-      return Promise.reject("Error in database.");
-    }
+    const data = await DB.all<MemoType[]>(sql, [userId]);
+    return data;
   }
 
   export async function getMemoById(id: string): Promise<MemoType | null> {
     const sql = `SELECT * FROM memos WHERE id=?`;
 
-    const data = await DB.query<MemoType[]>(sql, [id]);
-    if (Array.isArray(data)) {
-      if (data.length > 0) {
-        return data[0];
-      } else {
-        return null;
-      }
-    } else {
-      return Promise.reject("Error in database.");
-    }
+    const data = await DB.get<MemoType>(sql, [id]);
+    return data;
   }
 
   export async function updateMemoContent(memoId: string, content: string): Promise<boolean> {
     const sql = `UPDATE memos SET content=?, updated_at=? WHERE id=?`;
     const nowTimeStr = utils.getTimeString();
 
-    await DB.query(sql, [content, nowTimeStr, memoId]);
+    await DB.run(sql, [content, nowTimeStr, memoId]);
     return true;
   }
 
   export async function deleteMemoByID(memoId: string): Promise<boolean> {
     const sql = `DELETE FROM memos WHERE id=?`;
 
-    await DB.query(sql, [memoId]);
+    await DB.run(sql, [memoId]);
     return true;
   }
 
   export async function replaceMemoTagText(userId: string, prev: string, curr: string): Promise<boolean> {
     const sql = `UPDATE memos SET content=REPLACE(content, ?, ?) WHERE user_id=?`;
-    await DB.query(sql, ["# " + prev + " ", "# " + curr + " ", userId]);
+    await DB.run(sql, ["# " + prev + " ", "# " + curr + " ", userId]);
     return true;
   }
 
@@ -110,11 +93,7 @@ export namespace MemoModel {
     GROUP BY created_at
     ORDER BY created_at;`;
 
-    const data = await DB.query<{ timetamp: string; count: number }[]>(sql, [userId]);
-    if (Array.isArray(data)) {
-      return data;
-    } else {
-      return Promise.reject("Error in database.");
-    }
+    const data = await DB.all<{ timetamp: string; count: number }[]>(sql, [userId]);
+    return data;
   }
 }

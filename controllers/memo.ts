@@ -77,9 +77,7 @@ export namespace MemoController {
     }
 
     try {
-      // 删除 memo_tag
       await TagModel.deleteMemoTagByMemoId(memoId);
-      // 删除此 memo
       await MemoModel.deleteMemoByID(memoId);
     } catch (error) {
       throw new Error("50002");
