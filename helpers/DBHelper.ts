@@ -1,12 +1,31 @@
-import { utils } from "./utils";
+import { accessSync } from "fs";
 import sqlite3 from "sqlite3";
+import { utils } from "./utils";
 
-const db = new sqlite3.Database("./db/memos.db", (err) => {
-  if (err) {
-    console.error(err.message);
-  }
-  console.log("Connected to the sqlite database.");
-});
+const defaultDbFile = "./db/memos.db";
+const userDbFile = "/data/memos.db";
+
+let temp: sqlite3.Database | null = null;
+
+try {
+  accessSync(userDbFile);
+  temp = new sqlite3.Database(userDbFile, (err) => {
+    if (err) {
+      console.error(err.message);
+    }
+    console.log("Connected to the user database.");
+  });
+} catch (error) {
+  console.log("User db file not exist");
+  temp = new sqlite3.Database(defaultDbFile, (err) => {
+    if (err) {
+      console.error(err.message);
+    }
+    console.log("Connected to the default database.");
+  });
+}
+
+const db = temp as sqlite3.Database;
 
 function parseResult(result: any): BasicType {
   if (result instanceof Array) {
