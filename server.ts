@@ -13,11 +13,13 @@ const app = new Koa();
 
 app.use(errorHandler);
 
-app.use(
-  cors({
-    credentials: true,
-  })
-);
+if (process.env.NODE_ENV === "dev") {
+  app.use(
+    cors({
+      credentials: true,
+    })
+  );
+}
 
 app.use(
   Mount(
