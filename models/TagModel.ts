@@ -22,7 +22,7 @@ export namespace TagModel {
    * @param text
    */
   export async function createTag(userId: string, text: string): Promise<TagType> {
-    const nowTimeStr = utils.getTimeString();
+    const nowTimeStr = utils.getDateTimeString(Date.now());
     const tag: TagType = {
       id: utils.genUUID(),
       userId,

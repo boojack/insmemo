@@ -12,7 +12,7 @@ interface UserType {
 
 export namespace UserModel {
   export async function createUser(username: string, password: string, githubName: string = ""): Promise<UserType> {
-    const nowTimeStr = utils.getTimeString();
+    const nowTimeStr = utils.getDateTimeString(Date.now());
     const user: UserType = {
       id: utils.genUUID(),
       username,
@@ -27,7 +27,7 @@ export namespace UserModel {
   }
 
   export async function updateUser(id: string, username: string, password: string): Promise<boolean> {
-    const nowTimeStr = utils.getTimeString();
+    const nowTimeStr = utils.getDateTimeString(Date.now());
     const sql = `UPDATE users SET ${username ? "username='" + username + "' ," : ""} ${
       password ? "password='" + password + "' ," : ""
     } updated_at='${nowTimeStr}' WHERE id=?`;

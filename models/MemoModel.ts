@@ -12,7 +12,7 @@ interface MemoType {
 export namespace MemoModel {
   export async function createMemo(userId: string, content: string): Promise<MemoType> {
     const sql = `INSERT INTO memos (id, content, user_id, created_at, updated_at) VALUES (?, ?, ?, ?, ?)`;
-    const nowTimeStr = utils.getTimeString();
+    const nowTimeStr = utils.getDateTimeString(Date.now());
     const memo: MemoType = {
       id: utils.genUUID(),
       content,
@@ -48,8 +48,8 @@ export namespace MemoModel {
       SELECT * FROM memos 
       WHERE 
         user_id=?
-        ${Boolean(from) ? "AND created_at > '" + utils.getTimeString(from) + "'" : ""} 
-        ${Boolean(to) ? "AND created_at < '" + utils.getTimeString(to) + "'" : ""} 
+        ${Boolean(from) ? "AND created_at > '" + utils.getDateTimeString(from) + "'" : ""} 
+        ${Boolean(to) ? "AND created_at < '" + utils.getDateTimeString(to) + "'" : ""} 
       ORDER BY created_at 
       DESC 
     `;
@@ -67,7 +67,7 @@ export namespace MemoModel {
 
   export async function updateMemoContent(memoId: string, content: string): Promise<boolean> {
     const sql = `UPDATE memos SET content=?, updated_at=? WHERE id=?`;
-    const nowTimeStr = utils.getTimeString();
+    const nowTimeStr = utils.getDateTimeString(Date.now());
 
     await DB.run(sql, [content, nowTimeStr, memoId]);
     return true;
