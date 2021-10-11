@@ -3,6 +3,7 @@ import cors from "@koa/cors";
 import bodyParser from "koa-bodyparser";
 import Mount from "koa-mount";
 import Serve from "koa-static";
+import historyApiFallback from "koa2-connect-history-api-fallback";
 import { errorHandler } from "./middlewares/errorHandler";
 import { userRouter } from "./routers/user";
 import { memoRouter } from "./routers/memo";
@@ -30,6 +31,8 @@ app.use(
     })
   )
 );
+
+app.use(historyApiFallback({ whiteList: ["/api"] }));
 
 app.use(bodyParser());
 

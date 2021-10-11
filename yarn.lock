@@ -1286,6 +1286,11 @@ koa-static@^5.0.0:
     debug "^3.1.0"
     koa-send "^5.0.0"
 
+koa2-connect-history-api-fallback@^0.1.3:
+  version "0.1.3"
+  resolved "https://registry.npm.taobao.org/koa2-connect-history-api-fallback/download/koa2-connect-history-api-fallback-0.1.3.tgz#dd07b6183ab111d48a6e14f0896d39397c2b879b"
+  integrity sha1-3Qe2GDqxEdSKbhTwiW05OXwrh5s=
+
 koa@^2.13.1:
   version "2.13.3"
   resolved "https://registry.npmmirror.com/koa/download/koa-2.13.3.tgz?cache=0&sync_timestamp=1632468411112&other_urls=https%3A%2F%2Fregistry.npmmirror.com%2Fkoa%2Fdownload%2Fkoa-2.13.3.tgz#a62641ba753ec54bee2c6da1a4f294c5fac35407"
