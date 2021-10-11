@@ -24,6 +24,17 @@ export namespace MemoController {
     };
   }
 
+  export async function getDeletedMemos(ctx: Context) {
+    const userId = ctx.cookies.get("user_id") as string;
+
+    const memos: any[] = await MemoModel.getDeletedMemosByUserId(userId);
+
+    ctx.body = {
+      succeed: true,
+      data: memos,
+    };
+  }
+
   // get memos count
   export async function getMemosCount(ctx: Context) {
     const userId = ctx.cookies.get("user_id") as string;
@@ -66,6 +77,45 @@ export namespace MemoController {
     ctx.body = {
       succeed: true,
       data: memo,
+    };
+  }
+
+  export async function hideMemo(ctx: Context) {
+    const { memoId } = ctx.request.body;
+
+    if (!utils.isString(memoId)) {
+      throw new Error("30001");
+    }
+
+    try {
+      const nowTimeStr = utils.getDateTimeString(Date.now());
+      await MemoModel.updateMemoDeletedAt(memoId, nowTimeStr);
+    } catch (error) {
+      throw new Error("50002");
+    }
+
+    ctx.body = {
+      succeed: true,
+      message: "delete memo succeed",
+    };
+  }
+
+  export async function restoreMemo(ctx: Context) {
+    const { memoId } = ctx.request.body;
+
+    if (!utils.isString(memoId)) {
+      throw new Error("30001");
+    }
+
+    try {
+      await MemoModel.updateMemoDeletedAt(memoId, null);
+    } catch (error) {
+      throw new Error("50002");
+    }
+
+    ctx.body = {
+      succeed: true,
+      message: "delete memo succeed",
     };
   }
 

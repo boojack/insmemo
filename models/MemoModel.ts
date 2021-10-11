@@ -7,6 +7,7 @@ interface MemoType {
   userId: string;
   createdAt: string;
   updatedAt: string;
+  deletedAt?: string;
 }
 
 export namespace MemoModel {
@@ -37,7 +38,14 @@ export namespace MemoModel {
   }
 
   export async function getMemosByUserId(userId: string, offset: number, amount: number = 20): Promise<MemoType[]> {
-    const sql = `SELECT * FROM memos WHERE user_id=? ORDER BY created_at DESC LIMIT ${amount} OFFSET ${offset}`;
+    const sql = `SELECT * FROM memos WHERE user_id=? AND deleted_at IS NULL ORDER BY created_at DESC LIMIT ${amount} OFFSET ${offset}`;
+
+    const data = await DB.all<MemoType[]>(sql, [userId]);
+    return data;
+  }
+
+  export async function getDeletedMemosByUserId(userId: string): Promise<MemoType[]> {
+    const sql = `SELECT * FROM memos WHERE user_id=? AND deleted_at IS NOT NULL ORDER BY deleted_at DESC`;
 
     const data = await DB.all<MemoType[]>(sql, [userId]);
     return data;
@@ -78,6 +86,13 @@ export namespace MemoModel {
 
     await DB.run(sql, [memoId]);
     return true;
+  }
+
+  export async function updateMemoDeletedAt(memoId: string, deletedAtStr: string | null): Promise<MemoType[]> {
+    const sql = `UPDATE memos SET deleted_at=? WHERE id=?`;
+
+    const data = await DB.all<MemoType[]>(sql, [deletedAtStr, memoId]);
+    return data;
   }
 
   export async function replaceMemoTagText(userId: string, prev: string, curr: string): Promise<boolean> {

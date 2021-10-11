@@ -13,6 +13,7 @@ CREATE TABLE `memos`  (
   `user_id` TEXT NOT NULL,
   `created_at` TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `deleted_at` TEXT,
   FOREIGN KEY(`user_id`) REFERENCES `users`(`id`)
 );
 
