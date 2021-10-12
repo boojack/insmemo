@@ -191,11 +191,6 @@
   dependencies:
     "@types/node" "*"
 
-"@types/uuid@^8.3.0":
-  version "8.3.1"
-  resolved "https://registry.nlark.com/@types/uuid/download/@types/uuid-8.3.1.tgz#1a32969cf8f0364b3d8c8af9cc3555b7805df14f"
-  integrity sha1-GjKWnPjwNks9jIr5zDVVt4Bd8U8=
-
 abbrev@1:
   version "1.1.1"
   resolved "https://registry.npm.taobao.org/abbrev/download/abbrev-1.1.1.tgz#f8f2c887ad10bf67f634f005b6987fed3179aac8"
