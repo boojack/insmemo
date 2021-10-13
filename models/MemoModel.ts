@@ -104,7 +104,7 @@ export namespace MemoModel {
   export async function getMemosStatByUserId(userId: string): Promise<{ timetamp: string; count: number }[]> {
     const sql = `SELECT created_at as timestamp, 1 as amount
     FROM memos
-    WHERE user_id=?
+    WHERE user_id=? AND deleted_at IS NULL
     ORDER BY created_at;`;
 
     const data = await DB.all<{ timetamp: string; count: number }[]>(sql, [userId]);

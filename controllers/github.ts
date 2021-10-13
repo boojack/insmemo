@@ -58,7 +58,7 @@ export namespace GithubController {
     }
 
     ctx.cookies.set("user_id", user.id, {
-      maxAge: 1000 * 3600 * 24 * 365,
+      expires: new Date(Date.now() + 1000 * 3600 * 24 * 365),
     });
     ctx.redirect("https://memos.justsven.top/");
   }

@@ -71,7 +71,7 @@ export namespace UserController {
     }
 
     ctx.cookies.set("user_id", user.id, {
-      maxAge: 1000 * 3600 * 24 * 365,
+      expires: new Date(Date.now() + 1000 * 3600 * 24 * 365),
     });
 
     ctx.body = {
@@ -81,9 +81,7 @@ export namespace UserController {
   }
 
   export async function signout(ctx: Context) {
-    ctx.cookies.set("user_id", null, {
-      maxAge: -1,
-    });
+    ctx.cookies.set("user_id", null, {});
 
     ctx.body = {
       succeed: true,

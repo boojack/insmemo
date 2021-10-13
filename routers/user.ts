@@ -10,7 +10,7 @@ userRouter.get("/me", validSigninCookie, UserController.getMyUserInfo);
 userRouter.get("/amount", validSigninCookie, UserController.getDataAmount);
 userRouter.post("/signup", UserController.signup);
 userRouter.post("/signin", UserController.signin);
-userRouter.post("/signout", validSigninCookie, UserController.signout);
+userRouter.post("/signout", UserController.signout);
 userRouter.get("/checkusername", validSigninCookie, UserController.checkUsernameUsable);
 userRouter.post("/update", validSigninCookie, UserController.update);
 userRouter.post("/updategh", validSigninCookie, UserController.updateGithubName);
