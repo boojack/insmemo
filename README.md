@@ -2,6 +2,8 @@
 
 一个碎片化知识记录工具。
 
+私有化部署请参考：[docker image](https://hub.docker.com/r/neosmemo/memos)
+
 ---
 
 为何做这个？
