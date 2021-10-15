@@ -63,6 +63,23 @@ export namespace MemoController {
     };
   }
 
+  // get linked memos
+  export async function getLinkedMemosById(ctx: Context) {
+    const userId = ctx.cookies.get("user_id") as string;
+    const { memoId } = ctx.query;
+
+    if (!utils.isString(memoId)) {
+      throw new Error("30001");
+    }
+
+    const memos = await MemoModel.getLinkedMemosById(userId, memoId as string);
+
+    ctx.body = {
+      succeed: true,
+      data: memos,
+    };
+  }
+
   // create memo
   export async function createMemo(ctx: Context) {
     const userId = ctx.cookies.get("user_id") as string;

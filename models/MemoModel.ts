@@ -73,6 +73,12 @@ export namespace MemoModel {
     return data;
   }
 
+  export async function getLinkedMemosById(userId: string, memoId: string): Promise<MemoType[]> {
+    const sql = `SELECT * FROM memos WHERE user_id=? AND content LIKE '%[@%](${memoId})%'`;
+    const data = await DB.all<MemoType[]>(sql, [userId]);
+    return data;
+  }
+
   export async function updateMemoContent(memoId: string, content: string): Promise<boolean> {
     const sql = `UPDATE memos SET content=?, updated_at=? WHERE id=?`;
     const nowTimeStr = utils.getDateTimeString(Date.now());
