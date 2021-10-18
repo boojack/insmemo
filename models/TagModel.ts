@@ -7,6 +7,7 @@ interface TagType {
   text: string;
   level: number;
   createdAt: string;
+  pinnedAt?: string;
 }
 
 interface MemoTagType {
@@ -64,6 +65,21 @@ export namespace TagModel {
     return memoTag;
   }
 
+  export async function pinTag(tagId: string): Promise<boolean> {
+    const nowTimeStr = utils.getDateTimeString(Date.now());
+    const sql = `UPDATE tags SET pinned_at=? WHERE id=?`;
+
+    await DB.run(sql, [nowTimeStr, tagId]);
+    return true;
+  }
+
+  export async function unpinTag(tagId: string): Promise<boolean> {
+    const sql = `UPDATE tags SET pinned_at=NULL WHERE id=?`;
+
+    await DB.run(sql, [tagId]);
+    return true;
+  }
+
   export async function polishTagLevel(tagId: string): Promise<boolean> {
     const sql = `UPDATE tags SET level=level+1 WHERE id=?`;
 
@@ -72,7 +88,7 @@ export namespace TagModel {
   }
 
   export async function getTagsByUserId(userId: string): Promise<TagType[]> {
-    const sql = `SELECT tags.id, tags.text, tags.level, tags.created_at, COUNT(*) as amount FROM tags, memo_tag WHERE user_id=? AND tags.id = memo_tag.tag_id GROUP BY tags.id`;
+    const sql = `SELECT tags.id, tags.text, tags.level, tags.created_at, tags.pinned_at, COUNT(*) as amount FROM tags, memo_tag WHERE user_id=? AND tags.id = memo_tag.tag_id GROUP BY tags.id`;
 
     const data = await DB.all(sql, [userId]);
     return data;

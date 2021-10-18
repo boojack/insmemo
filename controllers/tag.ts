@@ -42,6 +42,36 @@ export namespace TagController {
     };
   }
 
+  export async function pinTag(ctx: Context) {
+    const { tagId } = ctx.request.body;
+
+    if (!utils.isString(tagId)) {
+      throw new Error("30001");
+    }
+
+    const result = await TagModel.pinTag(tagId);
+
+    ctx.body = {
+      succeed: true,
+      data: result,
+    };
+  }
+
+  export async function unpinTag(ctx: Context) {
+    const { tagId } = ctx.request.body;
+
+    if (!utils.isString(tagId)) {
+      throw new Error("30001");
+    }
+
+    const result = await TagModel.unpinTag(tagId);
+
+    ctx.body = {
+      succeed: true,
+      data: result,
+    };
+  }
+
   // update tag
   export async function updateTag(ctx: Context) {
     const userId = ctx.cookies.get("user_id") as string;
