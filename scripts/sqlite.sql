@@ -23,6 +23,7 @@ CREATE TABLE `tags`  (
   `text` TEXT NOT NULL,
   `created_at` TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `level` INTEGER NOT NULL DEFAULT 0,
+  `pinned_at` TEXT NULL,
   FOREIGN KEY(`user_id`) REFERENCES `users`(`id`)
 );
 
