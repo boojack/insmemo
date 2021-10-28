@@ -17,20 +17,13 @@ CREATE TABLE `memos`  (
   FOREIGN KEY(`user_id`) REFERENCES `users`(`id`)
 );
 
-CREATE TABLE `tags`  (
+CREATE TABLE `queries`  (
   `id` TEXT NOT NULL PRIMARY KEY,
   `user_id` TEXT NOT NULL,
-  `text` TEXT NOT NULL,
+  `title` TEXT NOT NULL,
+  `querystring` TEXT NOT NULL,
   `created_at` TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `level` INTEGER NOT NULL DEFAULT 0,
+  `updated_at` TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `pinned_at` TEXT NULL,
   FOREIGN KEY(`user_id`) REFERENCES `users`(`id`)
-);
-
-CREATE TABLE `memo_tag`  (
-  `id` TEXT NOT NULL PRIMARY KEY,
-  `memo_id` TEXT NOT NULL,
-  `tag_id` TEXT NOT NULL,
-  FOREIGN KEY(`memo_id`) REFERENCES `memos`(`id`),
-  FOREIGN KEY(`tag_id`) REFERENCES `tags`(`id`)
 );

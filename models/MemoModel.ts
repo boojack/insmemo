@@ -37,6 +37,13 @@ export namespace MemoModel {
     }
   }
 
+  export async function getAllMemosByUserId(userId: string): Promise<MemoType[]> {
+    const sql = `SELECT * FROM memos WHERE user_id=? AND deleted_at IS NULL ORDER BY created_at DESC`;
+
+    const data = await DB.all<MemoType[]>(sql, [userId]);
+    return data;
+  }
+
   export async function getMemosByUserId(userId: string, offset: number, amount: number = 20): Promise<MemoType[]> {
     const sql = `SELECT * FROM memos WHERE user_id=? AND deleted_at IS NULL ORDER BY created_at DESC LIMIT ${amount} OFFSET ${offset}`;
 

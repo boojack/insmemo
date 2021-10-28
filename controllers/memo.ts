@@ -1,22 +1,12 @@
 import { Context } from "koa";
 import { utils } from "../helpers/utils";
 import { MemoModel } from "../models/MemoModel";
-import { TagModel } from "../models/TagModel";
 
 export namespace MemoController {
-  // get memos by userid in cookie
-  // example: /api/memo/all?offset=0&amount=20
-  export async function getMemos(ctx: Context) {
+  // example: /api/memo/all
+  export async function getAllMemos(ctx: Context) {
     const userId = ctx.cookies.get("user_id") as string;
-    const { offset: offsetStr, amount: amountStr } = ctx.query;
-    let offset = parseInt(offsetStr as string) || 0;
-    let amount = parseInt(amountStr as string) || 20;
-
-    const memos: any[] = await MemoModel.getMemosByUserId(userId, offset, amount);
-
-    for (const m of memos) {
-      m.tags = await TagModel.getMemoTags(m.id);
-    }
+    const memos = await MemoModel.getAllMemosByUserId(userId);
 
     ctx.body = {
       succeed: true,
@@ -144,7 +134,6 @@ export namespace MemoController {
     }
 
     try {
-      await TagModel.deleteMemoTagByMemoId(memoId);
       await MemoModel.deleteMemoByID(memoId);
     } catch (error) {
       throw new Error("50002");

@@ -7,7 +7,7 @@ import historyApiFallback from "koa2-connect-history-api-fallback";
 import { errorHandler } from "./middlewares/errorHandler";
 import { userRouter } from "./routers/user";
 import { memoRouter } from "./routers/memo";
-import { tagRouter } from "./routers/tag";
+import { queryRouter } from "./routers/query";
 import { githubRouter } from "./routers/github";
 
 const app = new Koa();
@@ -38,7 +38,7 @@ app.use(bodyParser());
 
 app.use(userRouter.routes());
 app.use(memoRouter.routes());
-app.use(tagRouter.routes());
+app.use(queryRouter.routes());
 app.use(githubRouter.routes());
 
 app.listen(8080, () => {
