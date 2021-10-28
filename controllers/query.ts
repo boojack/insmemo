@@ -8,7 +8,11 @@ export namespace QueryController {
     const userId = ctx.cookies.get("user_id") as string;
     const { querystring, title } = ctx.request.body;
 
-    if (!utils.isString(querystring)) {
+    if (!utils.isString(querystring) || !utils.isString(title)) {
+      throw new Error("30001");
+    }
+
+    if (title === "" || querystring === "") {
       throw new Error("30001");
     }
 
@@ -57,7 +61,11 @@ export namespace QueryController {
   export async function updateQuery(ctx: Context) {
     const { queryId, querystring, title } = ctx.request.body;
 
-    if (!utils.isString(querystring) || !utils.isString(title)) {
+    if (!utils.isString(queryId) || !utils.isString(querystring) || !utils.isString(title)) {
+      throw new Error("30001");
+    }
+
+    if (queryId === "" || title === "" || querystring === "") {
       throw new Error("30001");
     }
 
