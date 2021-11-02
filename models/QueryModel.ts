@@ -49,7 +49,7 @@ export namespace QueryModel {
   }
 
   export async function getQueriesByUserId(userId: string): Promise<QueryType[]> {
-    const sql = `SELECT * FROM queries WHERE user_id=?`;
+    const sql = `SELECT id, title, querystring, created_at, pinned_at FROM queries WHERE user_id=?`;
 
     const data = await DB.all<QueryType[]>(sql, [userId]);
     return data;
