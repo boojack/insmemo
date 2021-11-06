@@ -41,7 +41,7 @@ export namespace GithubController {
       if (!githubNameUsable) {
         throw new Error("20011");
       }
-      await UserModel.updateGithubName(userId, ghUser.login);
+      await UserModel.updateUser(userId, "", "", ghUser.login);
     }
 
     let user = await UserModel.getUserByGhName(ghUser.login);

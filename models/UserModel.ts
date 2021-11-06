@@ -26,18 +26,12 @@ export namespace UserModel {
     return user;
   }
 
-  export async function updateUser(id: string, username: string, password: string): Promise<boolean> {
+  export async function updateUser(id: string, username?: string, password?: string, githubName?: string): Promise<boolean> {
     const nowTimeStr = utils.getDateTimeString(Date.now());
-    const sql = `UPDATE users SET ${username ? "username='" + username + "' ," : ""} ${
-      password ? "password='" + password + "' ," : ""
-    } updated_at='${nowTimeStr}' WHERE id=?`;
+    const sql = `UPDATE users SET ${username !== undefined ? "username='" + username + "' ," : ""} ${
+      password !== undefined ? "password='" + password + "' ," : ""
+    } ${githubName !== undefined ? "github_name='" + githubName + "' ," : ""} updated_at='${nowTimeStr}' WHERE id=?`;
     await DB.run(sql, [id]);
-    return true;
-  }
-
-  export async function updateGithubName(id: string, githubName: string): Promise<boolean> {
-    const sql = `UPDATE users SET github_name=? WHERE id=?`;
-    await DB.run(sql, [githubName, id]);
     return true;
   }
 

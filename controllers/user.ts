@@ -104,21 +104,9 @@ export namespace UserController {
 
   export async function update(ctx: Context) {
     const userId = ctx.cookies.get("user_id") as string;
-    const { username, password } = ctx.request.body;
+    const { username, password, githubName } = ctx.request.body;
 
-    await UserModel.updateUser(userId, username ?? "", password ?? "");
-
-    ctx.body = {
-      succeed: true,
-      message: "update succeed",
-    };
-  }
-
-  export async function updateGithubName(ctx: Context) {
-    const userId = ctx.cookies.get("user_id") as string;
-    const { githubName } = ctx.request.body;
-
-    await UserModel.updateGithubName(userId, githubName);
+    await UserModel.updateUser(userId, username, password, githubName);
 
     ctx.body = {
       succeed: true,

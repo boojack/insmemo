@@ -9,12 +9,10 @@ export const memoRouter = new Router({
 memoRouter.use(validSigninCookie);
 memoRouter.get("/", MemoController.getMemoById);
 memoRouter.get("/all", MemoController.getAllMemos);
-memoRouter.get("/linkeds", MemoController.getLinkedMemosById);
-memoRouter.get("/trash", MemoController.getDeletedMemos);
-memoRouter.get("/count", MemoController.getMemosCount);
+memoRouter.get("/linked", MemoController.getLinkedMemosById);
+memoRouter.get("/deleted", MemoController.getDeletedMemos);
 memoRouter.post("/new", MemoController.createMemo);
 memoRouter.post("/hide", MemoController.hideMemo);
 memoRouter.post("/restore", MemoController.restoreMemo);
 memoRouter.post("/delete", MemoController.deleteMemo);
 memoRouter.post("/update", MemoController.updateMemo);
-memoRouter.get("/stat", MemoController.getMemoStat);
