@@ -104,9 +104,9 @@ export namespace UserController {
 
   export async function update(ctx: Context) {
     const userId = ctx.cookies.get("user_id") as string;
-    const { username, password, githubName } = ctx.request.body;
+    const { username, password, githubName, wxUserId } = ctx.request.body;
 
-    await UserModel.updateUser(userId, username, password, githubName);
+    await UserModel.updateUser(userId, username, password, githubName, wxUserId);
 
     ctx.body = {
       succeed: true,

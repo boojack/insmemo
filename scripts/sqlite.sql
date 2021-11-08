@@ -3,6 +3,7 @@ CREATE TABLE `users` (
 	`username` TEXT NOT NULL,
 	`password` TEXT NOT NULL,
 	`github_name` TEXT NULL DEFAULT '',
+  `wx_user_id` TEXT NULL DEFAULT '',
 	`created_at` TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
 );

@@ -35,7 +35,11 @@ app.use(
 
 app.use(historyApiFallback({ whiteList: ["/api"] }));
 
-app.use(bodyParser());
+app.use(
+  bodyParser({
+    enableTypes: ["json", "form", "text", "xml"],
+  })
+);
 
 app.use(userRouter.routes());
 app.use(memoRouter.routes());
