@@ -2,9 +2,8 @@ import { accessSync } from "fs";
 import sqlite3 from "sqlite3";
 import { utils } from "./utils";
 
-const defaultDbFile = "./data/memos.db";
 // JUST FOR DEV
-const devDbFile = "/Users/sli4/Downloads/data/memos.db";
+const devDbFile = "/Users/sli4/Downloads/resources/memos.db";
 const userDbFile = process.env.NODE_ENV === "dev" ? devDbFile : "/data/memos.db";
 
 function getDbInstance() {
@@ -20,14 +19,8 @@ function getDbInstance() {
       }
     });
   } catch (error) {
-    console.log("User db file not exist");
-    temp = new sqlite3.Database(defaultDbFile, (err) => {
-      if (err) {
-        console.error(err.message);
-      } else {
-        console.log("Connected to the default database.");
-      }
-    });
+    console.log("/data/memo.db file not exist");
+    throw "/data/memo.db file not exist";
   }
 
   return temp;

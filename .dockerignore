@@ -1,2 +1,13 @@
+.DS_Store
+
+# Git
+.git
+.gitattributes
+.gitignore
+
+# Dependency
 node_modules
 .yarn
+
+# build/
+resources
