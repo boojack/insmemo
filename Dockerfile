@@ -6,7 +6,7 @@ ENV TZ=Asia/Shanghai
 COPY . .
 
 RUN npm install --only=production
-
+RUN npm install -g typescript
 RUN npm run build
 
 CMD [ "node", "./build/server.js" ]
