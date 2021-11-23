@@ -4,6 +4,7 @@
 .git
 .gitattributes
 .gitignore
+.github
 
 # Dependency
 node_modules
@@ -11,3 +12,4 @@ node_modules
 
 # build/
 resources
+build
