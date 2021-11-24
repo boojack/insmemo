@@ -1,5 +1,4 @@
 import Koa from "koa";
-import cors from "@koa/cors";
 import bodyParser from "koa-bodyparser";
 import Mount from "koa-mount";
 import Serve from "koa-static";
@@ -14,14 +13,6 @@ import { wxRouter } from "./routers/wx";
 const app = new Koa();
 
 app.use(errorHandler);
-
-if (process.env.NODE_ENV === "dev") {
-  app.use(
-    cors({
-      credentials: true,
-    })
-  );
-}
 
 app.use(
   Mount(

@@ -3,7 +3,7 @@ import sqlite3 from "sqlite3";
 import { utils } from "./utils";
 
 // JUST FOR DEV
-const devDbFile = "/Users/sli4/Downloads/resources/memos.db";
+const devDbFile = "/Users/sli4/Downloads/data/memos.db";
 const userDbFile = process.env.NODE_ENV === "dev" ? devDbFile : "/data/memos.db";
 
 function getDbInstance() {
