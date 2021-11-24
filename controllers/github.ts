@@ -1,8 +1,9 @@
 import { Context } from "koa";
-import { UserModel } from "../models/UserModel";
-import { githubOAuthConfig } from "../helpers/config";
 import axios from "axios";
 import querystring from "querystring";
+import { githubOAuthConfig } from "../helpers/config";
+import utils from "../helpers/utils";
+import { UserModel } from "../models/UserModel";
 
 interface GithubUserInfo {
   id: number;
@@ -41,7 +42,7 @@ export namespace GithubController {
       if (!githubNameUsable) {
         throw new Error("20011");
       }
-      await UserModel.updateUser(userId, "", "", ghUser.login);
+      await UserModel.updateUser(userId, undefined, undefined, ghUser.login);
     }
 
     let user = await UserModel.getUserByGhName(ghUser.login);
@@ -51,7 +52,7 @@ export namespace GithubController {
       let username = ghUser.name;
       let usernameUsable = await UserModel.checkUsernameUsable(username);
       while (!usernameUsable) {
-        username += "v";
+        username = ghUser.name + utils.genUUID();
         usernameUsable = await UserModel.checkUsernameUsable(username);
       }
       user = await UserModel.createUser(username, username, ghUser.login);
@@ -60,6 +61,6 @@ export namespace GithubController {
     ctx.cookies.set("user_id", user.id, {
       expires: new Date(Date.now() + 1000 * 3600 * 24 * 365),
     });
-    ctx.redirect("https://memos.justsven.top/");
+    ctx.redirect(githubOAuthConfig.redirectUri);
   }
 }

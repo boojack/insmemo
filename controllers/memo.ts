@@ -1,5 +1,5 @@
 import { Context } from "koa";
-import { utils } from "../helpers/utils";
+import utils from "../helpers/utils";
 import { MemoModel } from "../models/MemoModel";
 
 export namespace MemoController {

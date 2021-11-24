@@ -1,5 +1,5 @@
 import { Context } from "koa";
-import { utils } from "../helpers/utils";
+import utils from "../helpers/utils";
 import { QueryModel } from "../models/QueryModel";
 
 export namespace QueryController {

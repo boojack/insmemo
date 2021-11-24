@@ -1,6 +1,6 @@
 import { Context } from "koa";
 import { parseStringPromise } from "xml2js";
-import { utils } from "../helpers/utils";
+import utils from "../helpers/utils";
 import { MemoModel } from "../models/MemoModel";
 import { UserModel } from "../models/UserModel";
 

@@ -1,4 +1,5 @@
 export const githubOAuthConfig = {
-  clientId: "187ba36888f152b06612",
-  clientSecret: "10b6fec4146cbb7bdf64016b3cf0905366a35041",
+  clientId: process.env.GH_CLIENT_ID || "GH_CLIENT_ID",
+  clientSecret: process.env.GH_CLIENT_SECRET || "GH_CLIENT_SECRET",
+  redirectUri: process.env.GH_REDIRECT_URI || "https://github.com/",
 };

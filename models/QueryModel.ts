@@ -1,5 +1,5 @@
 import DB from "../helpers/DBHelper";
-import { utils } from "../helpers/utils";
+import utils from "../helpers/utils";
 
 interface QueryType {
   id: string;

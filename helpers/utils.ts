@@ -1,7 +1,7 @@
 import crypto from "crypto";
 import { generate } from "short-uuid";
 
-export namespace utils {
+namespace utils {
   /**
    * generate uuid
    * @returns uuid
@@ -93,3 +93,5 @@ export namespace utils {
     return crypto.createHash("sha1").update(str).digest("hex");
   }
 }
+
+export default utils;

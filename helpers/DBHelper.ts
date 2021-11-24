@@ -1,6 +1,6 @@
 import { accessSync } from "fs";
 import sqlite3 from "sqlite3";
-import { utils } from "./utils";
+import utils from "./utils";
 
 // JUST FOR DEV
 const devDbFile = "/Users/sli4/Downloads/data/memos.db";
