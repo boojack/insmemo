@@ -35,7 +35,7 @@ export namespace GithubController {
     }
 
     // 如果已经登录，则更新绑定信息
-    const userId = ctx.cookies.get("user_id") as string;
+    const userId = ctx.session?.userId as string;
 
     if (userId) {
       const githubNameUsable = await UserModel.checkGithubnameUsable(ghUser.login);
@@ -58,9 +58,8 @@ export namespace GithubController {
       user = await UserModel.createUser(username, username, ghUser.login);
     }
 
-    ctx.cookies.set("user_id", user.id, {
-      expires: new Date(Date.now() + 1000 * 3600 * 24 * 365),
-    });
+    ctx.session!.userId = user.id;
+
     ctx.redirect(githubOAuthConfig.redirectUri);
   }
 }

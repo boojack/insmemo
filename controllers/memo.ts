@@ -5,7 +5,7 @@ import { MemoModel } from "../models/MemoModel";
 export namespace MemoController {
   // example: /api/memo/all
   export async function getAllMemos(ctx: Context) {
-    const userId = ctx.cookies.get("user_id") as string;
+    const userId = ctx.session?.userId as string;
     const memos = await MemoModel.getAllMemosByUserId(userId);
 
     ctx.body = {
@@ -15,7 +15,7 @@ export namespace MemoController {
   }
 
   export async function getDeletedMemos(ctx: Context) {
-    const userId = ctx.cookies.get("user_id") as string;
+    const userId = ctx.session?.userId as string;
 
     const memos: any[] = await MemoModel.getDeletedMemosByUserId(userId);
 
@@ -43,7 +43,7 @@ export namespace MemoController {
 
   // get linked memos
   export async function getLinkedMemosById(ctx: Context) {
-    const userId = ctx.cookies.get("user_id") as string;
+    const userId = ctx.session?.userId as string;
     const { memoId } = ctx.query;
 
     if (!utils.isString(memoId)) {
@@ -60,7 +60,7 @@ export namespace MemoController {
 
   // create memo
   export async function createMemo(ctx: Context) {
-    const userId = ctx.cookies.get("user_id") as string;
+    const userId = ctx.session?.userId as string;
     const { content } = ctx.request.body;
 
     if (!utils.isString(content)) {

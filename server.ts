@@ -2,6 +2,7 @@ import Koa from "koa";
 import bodyParser from "koa-bodyparser";
 import Mount from "koa-mount";
 import Serve from "koa-static";
+import session from "koa-session";
 import historyApiFallback from "koa2-connect-history-api-fallback";
 import { errorHandler } from "./middlewares/errorHandler";
 import { userRouter } from "./routers/user";
@@ -11,6 +12,22 @@ import { githubRouter } from "./routers/github";
 import { wxRouter } from "./routers/wx";
 
 const app = new Koa();
+
+const CONFIG: Partial<session.opts> = {
+  key: "session",
+  maxAge: 1000 * 3600 * 24 * 365,
+  overwrite: true,
+  httpOnly: true,
+  signed: true,
+  rolling: false,
+  renew: false,
+  secure: false,
+  sameSite: "strict",
+};
+
+app.keys = ["justsven.site"];
+
+app.use(session(CONFIG, app));
 
 app.use(errorHandler);
 

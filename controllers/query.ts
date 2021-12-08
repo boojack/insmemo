@@ -5,7 +5,7 @@ import { QueryModel } from "../models/QueryModel";
 export namespace QueryController {
   // create query
   export async function createQuery(ctx: Context) {
-    const userId = ctx.cookies.get("user_id") as string;
+    const userId = ctx.session?.userId as string;
     const { querystring, title } = ctx.request.body;
 
     if (!utils.isString(querystring) || !utils.isString(title)) {
@@ -80,7 +80,7 @@ export namespace QueryController {
 
   // get my queries
   export async function getMyQueries(ctx: Context) {
-    const userId = ctx.cookies.get("user_id") as string;
+    const userId = ctx.session?.userId as string;
 
     const queries = await QueryModel.getQueriesByUserId(userId);
 

@@ -7,7 +7,7 @@ export namespace UserController {
    * use for check sign in status
    */
   export async function getMyUserInfo(ctx: Context) {
-    const userId = ctx.cookies.get("user_id") as string;
+    const userId = ctx.session?.userId as string;
     const userinfo = await UserModel.getUserInfoById(userId);
 
     if (!userinfo) {
@@ -45,9 +45,7 @@ export namespace UserController {
       throw new Error("20003");
     }
 
-    ctx.cookies.set("user_id", user.id, {
-      expires: new Date(Date.now() + 1000 * 3600 * 24 * 365),
-    });
+    ctx.session!.userId = user.id;
 
     ctx.body = {
       succeed: true,
@@ -68,9 +66,7 @@ export namespace UserController {
       throw new Error("20004");
     }
 
-    ctx.cookies.set("user_id", user.id, {
-      expires: new Date(Date.now() + 1000 * 3600 * 24 * 365),
-    });
+    ctx.session!.userId = user.id;
 
     ctx.body = {
       succeed: true,
@@ -79,7 +75,7 @@ export namespace UserController {
   }
 
   export async function signout(ctx: Context) {
-    ctx.cookies.set("user_id", null, {});
+    ctx.session!.userId = null;
 
     ctx.body = {
       succeed: true,
@@ -103,7 +99,7 @@ export namespace UserController {
   }
 
   export async function update(ctx: Context) {
-    const userId = ctx.cookies.get("user_id") as string;
+    const userId = ctx.session?.userId as string;
     const { username, password, githubName, wxUserId } = ctx.request.body;
 
     await UserModel.updateUser(userId, username, password, githubName, wxUserId);
@@ -115,7 +111,7 @@ export namespace UserController {
   }
 
   export async function checkPassword(ctx: Context) {
-    const userId = ctx.cookies.get("user_id") as string;
+    const userId = ctx.session?.userId as string;
     const { password } = ctx.request.body;
 
     if (!password) {
